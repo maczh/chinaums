@@ -35,6 +35,7 @@ const (
 	URI_BC_REFUND       = "/v2/poslink/transaction/refund"
 	URI_BC_QUERY        = "/v2/poslink/transaction/query"
 	URI_BC_REFUND_QUERY = "/v2/poslink/transaction/query-refund"
+	URI_WX_APP_PAY      = "/v1/netpay/wx/unified-order"
 )
 
 var StoreGISMap = map[string]gis{

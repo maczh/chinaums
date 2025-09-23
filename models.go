@@ -23,13 +23,17 @@ type BSCPayReq struct {
 }
 
 type OrderGoods struct {
-	GoodsId       string `json:"goodsId"`       //商品ID，选填
-	GoodsName     string `json:"goodsName"`     //商品名称，选填
-	Quantity      int64  `json:"quantity"`      //商品数量，选填，默认1
-	Price         int64  `json:"price"`         //商品单价，必填，单位分
-	GoodsCategory string `json:"goodsCategory"` //商品分类，选填
-	Body          string `json:"body"`          //商品描述，选填
-	Discount      int64  `json:"discount"`      //商品优惠金额，选填，单位分
+	GoodsId        string `json:"goodsId"`                  //商品ID，选填
+	GoodsName      string `json:"goodsName"`                //商品名称，选填
+	Quantity       int64  `json:"quantity"`                 //商品数量，选填，默认1
+	Price          int64  `json:"price"`                    //商品单价，必填，单位分
+	GoodsCategory  string `json:"goodsCategory"`            //商品分类，选填
+	Body           string `json:"body"`                     //商品描述，选填
+	Unit           string `json:"unit,omitempty"`           //商品单位，选填
+	Discount       int64  `json:"discount"`                 //商品优惠金额，选填，单位分
+	SubMerchantId  string `json:"subMerchantId,omitempty"`  //子商户ID，选填
+	MerOrderId     string `json:"merOrderId,omitempty"`     //子商户订单号，选填
+	SubOrderAmount int64  `json:"subOrderAmount,omitempty"` //子商户订单金额，选填，单位分
 }
 
 type BSCPayResp struct {
@@ -195,4 +199,74 @@ type BSCRefundQueryResp struct {
 	ThirdPartyName          string `json:"thirdPartyName"`         //第三方名称(微信、支付宝、云闪付)
 	RefundOrderId           string `json:"refundOrderId"`          //退款订单号
 	RefundTargetOrderId     string `json:"refundTargetOrderId"`    //退款目标订单号
+}
+
+type WxAppPayReq struct {
+	RequestTimestamp   string       `json:"requestTimestamp"` //请求时间戳，格式yyyy-MM-dd HH:mm:ss
+	MerOrderId         string       `json:"merOrderId"`       //商户订单号，必填，长度32位，字母数字下划线组合
+	Mid                string       `json:"mid"`              //商户ID，必填，长度32位，字母数字下划线组合
+	Tid                string       `json:"tid"`              //终端ID，必填，长度32位，字母数字下划线组合
+	TotalAmount        int64        `json:"totalAmount"`      //订单金额，单位分，必填，长度11位，整数位10位，小数位2位
+	SubAppId           string       `json:"subAppId"`         //微信子商户APPID
+	TradeType          string       `json:"tradeType"`        //交易类型，必填，值为MINI
+	SubOpenId          string       `json:"subOpenId"`        //微信子商户用户openid
+	MsgId              string       `json:"msgId"`            //消息ID，必填，长度64位，字母数字下划线组合
+	SrcReserve         string       `json:"srcReserve,omitempty"`
+	InstMid            string       `json:"instMid,omitempty"` //机构商户号，选填，值MINIDEFAULT
+	Goods              []OrderGoods `json:"goods,omitempty"`
+	ExpireTime         string       `json:"expireTime,omitempty"` //订单失效时间，格式yyyy-MM-dd HH:mm:ss，选填，默认30分钟后失效
+	GoodsTag           string       `json:"goodsTag,omitempty"`
+	OrderDesc          string       `json:"orderDesc,omitempty"` //订单描述，选填
+	OriginalAmount     int64        `json:"originalAmount"`      //订单金额，单位分，必填，单位为分
+	ProductId          string       `json:"productId,omitempty"` //商品ID
+	NotifyUrl          string       `json:"notifyUrl,omitempty"` //通知地址，选填
+	ReturnUrl          string       `json:"returnUrl,omitempty"` //网页跳转地址，选填
+	ShowUrl            string       `json:"showUrl,omitempty"`   //网页跳转地址，选填
+	SecureTransaction  string       `json:"secureTransaction,omitempty"`
+	UserId             string       `json:"userId,omitempty"`
+	LimitCreditCard    string       `json:"limitCreditCard,omitempty"`
+	InstallmentNumber  string       `json:"installmentNumber,omitempty"`
+	Name               string       `json:"name,omitempty"` //姓名，选填
+	Mobile             string       `json:"mobile,omitempty"`
+	CertType           string       `json:"certType,omitempty"`
+	CertNo             string       `json:"certNo,omitempty"`
+	FixBuyer           string       `json:"fixBuyer,omitempty"` //是否固定买家，选填，默认N
+	FeeRatio           string       `json:"feeRatio,omitempty"` //手续费率，选填，默认0
+	CostSubsidy        string       `json:"costSubsidy,omitempty"`
+	PreauthTransaction string       `json:"preauthTransaction,omitempty"`
+	ClientIp           string       `json:"clientIp,omitempty"`
+}
+
+type SubOrder struct {
+	Mid         string `json:"mid "`
+	MerOrderId  string `json:"merOrderId "`
+	TotalAmount int64  `json:"totalAmount "`
+}
+
+type WxAppPayResp struct {
+	MerName        string `json:"merName"` //商户名称
+	Mid            string `json:"mid"`     //商户ID
+	MiniPayRequest struct {
+		Package   string `json:"package"`
+		AppId     string `json:"appId"`     //微信APPID
+		Sign      string `json:"sign"`      //签名
+		PartnerId string `json:"partnerId"` //商户号
+		PrepayId  string `json:"prepayId"`  //预支付交易会话ID
+		NonceStr  string `json:"nonceStr"`  //随机字符串
+		TimeStamp string `json:"timeStamp"` //时间戳
+	} `json:"miniPayRequest"` //小程序支付请求参数
+	SettleRefId       string `json:"settleRefId"`
+	Tid               string `json:"tid"`               //终端ID
+	TotalAmount       int64  `json:"totalAmount"`       //订单金额，单位分
+	QrCode            string `json:"qrCode"`            //二维码
+	TargetMid         string `json:"targetMid"`         //目标商户ID
+	ResponseTimestamp string `json:"responseTimestamp"` //响应时间戳，格式yyyy-MM-dd HH:mm:ss
+	ErrCode           string `json:"errCode"`           //错误码
+	ErrMsg            string `json:"errMsg"`            //错误信息
+	PrepayId          string `json:"prepayId"`          //预支付交易会话ID
+	TargetStatus      string `json:"targetStatus"`      //目标状态
+	SeqId             string `json:"seqId"`             //序列ID
+	MerOrderId        string `json:"merOrderId"`        //商户订单号
+	Status            string `json:"status"`            //状态
+	TargetSys         string `json:"targetSys"`         //目标系统
 }
