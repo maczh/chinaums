@@ -39,9 +39,15 @@ func (b *bscPay) Pay(req *BSCPayReq) (*BSCPayResp, error) {
 	if req.StoreId == "" {
 		return nil, fmt.Errorf("store id is empty")
 	}
-	req.MerchantCode = config.MerchantId
-	req.TerminalCode = config.TerminalId
-	req.TransactionCurrencyCode = CNY
+	if req.MerchantCode == "" {
+		req.MerchantCode = config.MerchantId
+	}
+	if req.TerminalCode == "" {
+		req.TerminalCode = config.TerminalId
+	}
+	if req.TransactionCurrencyCode == "" {
+		req.TransactionCurrencyCode = CNY
+	}
 	req.PayMode = PayModeScan
 	req.DeviceType = DeviceTypeBC
 	req.Longitude = StoreGISMap[req.StoreId].Longitude
@@ -87,8 +93,12 @@ func (b *bscPay) VoidPay(req *BSCVoidPayReq) (*BSCVoidPayResp, error) {
 	if req.OriginalOrderId == "" {
 		return nil, fmt.Errorf("original order id is empty")
 	}
-	req.MerchantCode = config.MerchantId
-	req.TerminalCode = config.TerminalId
+	if req.MerchantCode == "" {
+		req.MerchantCode = config.MerchantId
+	}
+	if req.TerminalCode == "" {
+		req.TerminalCode = config.TerminalId
+	}
 	jsonstr := ToJSON(req)
 	fmt.Printf("请求JSON: %s\n", jsonstr)
 	sign, err := getOpenBodySig(config.AppId, config.AppKey, jsonstr)
@@ -134,8 +144,12 @@ func (b *bscPay) Refund(req *BSCRefundReq) (*BSCRefundResp, error) {
 	if req.TransactionAmount <= 0 {
 		return nil, fmt.Errorf("transaction amount is invalid")
 	}
-	req.MerchantCode = config.MerchantId
-	req.TerminalCode = config.TerminalId
+	if req.MerchantCode == "" {
+		req.MerchantCode = config.MerchantId
+	}
+	if req.TerminalCode == "" {
+		req.TerminalCode = config.TerminalId
+	}
 	jsonstr := ToJSON(req)
 	fmt.Printf("请求JSON: %s\n", jsonstr)
 	sign, err := getOpenBodySig(config.AppId, config.AppKey, jsonstr)
@@ -175,8 +189,12 @@ func (b *bscPay) Query(req *BSCQueryReq) (*BSCQueryResp, error) {
 	if req.OriginalOrderId == "" {
 		return nil, fmt.Errorf("original order id is empty")
 	}
-	req.MerchantCode = config.MerchantId
-	req.TerminalCode = config.TerminalId
+	if req.MerchantCode == "" {
+		req.MerchantCode = config.MerchantId
+	}
+	if req.TerminalCode == "" {
+		req.TerminalCode = config.TerminalId
+	}
 	jsonstr := ToJSON(req)
 	fmt.Printf("请求JSON: %s\n", jsonstr)
 	sign, err := getOpenBodySig(config.AppId, config.AppKey, jsonstr)
@@ -222,8 +240,12 @@ func (b *bscPay) RefundQuery(req *BSCRefundQueryReq) (*BSCRefundQueryResp, error
 	if req.OriTransDate == "" {
 		return nil, fmt.Errorf("ori trans date is empty")
 	}
-	req.MerchantCode = config.MerchantId
-	req.TerminalCode = config.TerminalId
+	if req.MerchantCode == "" {
+		req.MerchantCode = config.MerchantId
+	}
+	if req.TerminalCode == "" {
+		req.TerminalCode = config.TerminalId
+	}
 	jsonstr := ToJSON(req)
 	fmt.Printf("请求JSON: %s\n", jsonstr)
 	sign, err := getOpenBodySig(config.AppId, config.AppKey, jsonstr)
