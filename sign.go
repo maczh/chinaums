@@ -57,12 +57,12 @@ func getOpenBodySig(appId, appKey, body string) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("计算body摘要失败: %v", err)
 	}
-	fmt.Println("bodyDigest:")
-	fmt.Println(bodyDigest)
+	//fmt.Println("bodyDigest:")
+	//fmt.Println(bodyDigest)
 
 	// 构建待签名字符串
 	str1C := appId + timestamp + nonce + bodyDigest
-	fmt.Println("str1_C:" + str1C)
+	//fmt.Println("str1_C:" + str1C)
 
 	// 计算HMAC-SHA256签名
 	signature, err := hmacSHA256([]byte(str1C), []byte(appKey))
@@ -77,8 +77,6 @@ func getOpenBodySig(appId, appKey, body string) (string, error) {
 	authorization := fmt.Sprintf("OPEN-BODY-SIG AppId=\"%s\", Timestamp=\"%s\", Nonce=\"%s\", Signature=\"%s\"",
 		appId, timestamp, nonce, signatureBase64)
 
-	fmt.Println("Authorization:")
-	fmt.Println(authorization)
-
+	fmt.Println("Authorization:" + authorization)
 	return authorization, nil
 }
