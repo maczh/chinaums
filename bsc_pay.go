@@ -61,8 +61,8 @@ func (b *bscPay) Pay(req *BSCPayReq) (*BSCPayResp, error) {
 		log.Errorf("get open body sig failed: %v", err)
 		return nil, fmt.Errorf("get open body sig failed: %w", err)
 	}
-	fmt.Printf("接口地址: %s\n", config.ApiHost+URI_BC)
-	resp, err := grequests.DoRegularRequest("POST", config.ApiHost+URI_BC, &grequests.RequestOptions{
+	fmt.Printf("接口地址: %s\n", config.ApiHost+URI_BC_PAY)
+	resp, err := grequests.DoRegularRequest("POST", config.ApiHost+URI_BC_PAY, &grequests.RequestOptions{
 		Headers: map[string]string{
 			"Content-Type":  "application/json; charset=UTF-8",
 			"Authorization": sign,

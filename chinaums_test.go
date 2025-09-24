@@ -94,3 +94,23 @@ func TestBSCRefundQuery(t *testing.T) {
 	}
 	t.Log("退款查询结果:", ToJSONPretty(resp))
 }
+
+func TestWxAppPay(t *testing.T) {
+	req := WxAppPayReq{
+		TotalAmount:    1,
+		OriginalAmount: 1,
+		MerOrderId:     "3GETJH" + time.Now().Format("20060102150405"),
+		SubAppId:       "wx014ad2ef80a147a7",
+		SubOpenId:      "o_GKc6wW1I3AbnCI9rXCLpPwd-R8",
+		NotifyUrl:      "https://www.baidu.com",
+		ReturnUrl:      "https://www.baidu.com",
+		OrderDesc:      "火锅消费订单(寄海火锅福州东街口店)",
+		Goods:          nil,
+	}
+	resp, err := Client.WxAppPay.Pay(&req)
+	if err != nil {
+		t.Log("小程序支付接口调用失败:", err)
+		return
+	}
+	t.Log("微信小程序支付结果:", ToJSONPretty(resp))
+}

@@ -270,3 +270,156 @@ type WxAppPayResp struct {
 	Status            string `json:"status"`            //状态
 	TargetSys         string `json:"targetSys"`         //目标系统
 }
+
+type WxAppQueryReq struct {
+	RequestTimestamp string `json:"requestTimestamp"`
+	Mid              string `json:"mid"`
+	MerOrderId       string `json:"merOrderId"`
+	TargetOrderId    string `json:"targetOrderId"`
+	Tid              string `json:"tid"`
+	MsgId            string `json:"msgId"`
+	InstMid          string `json:"instMid"`
+}
+
+type WxAppQueryResp struct {
+	BuyerUsername     string `json:"buyerUsername"`
+	PayTime           string `json:"payTime"`
+	SeqId             string `json:"seqId"`
+	InvoiceAmount     int64  `json:"invoiceAmount"`
+	SettleDate        string `json:"settleDate"`
+	BuyerId           string `json:"buyerId"`
+	TotalAmount       int64  `json:"totalAmount"`
+	CouponAmount      int64  `json:"couponAmount"`
+	BuyerPayAmount    int64  `json:"buyerPayAmount"`
+	TargetOrderId     string `json:"targetOrderId"`
+	MerOrderId        string `json:"merOrderId"`
+	Status            string `json:"status"`
+	TargetSys         string `json:"targetSys"`
+	MerName           string `json:"merName"`
+	Mid               string `json:"mid"`
+	Tid               string `json:"tid"`
+	InstMid           string `json:"instMid"`
+	ResponseTimestamp string `json:"responseTimestamp"`
+	ErrCode           string `json:"errCode"`
+}
+
+type WxAppRefundReq struct {
+	RequestTimestamp string `json:"requestTimestamp"`
+	MsgId            string `json:"msgId"`
+	Mid              string `json:"mid"`
+	Tid              string `json:"tid"`
+	SubOrders        []struct {
+		MerOrderId    string `json:"merOrderId"`
+		RefundOrderId string `json:"refundOrderId"`
+		TotalAmount   int64  `json:"totalAmount"`
+		Mid           string `json:"mid"`
+	} `json:"subOrders"`
+	InstMid        string `json:"instMid"`
+	PlatformAmount int64  `json:"platformAmount"`
+	RefundAmount   int64  `json:"refundAmount"`
+	RefundOrderId  string `json:"refundOrderId"`
+	MerOrderId     string `json:"merOrderId"`
+	TargetOrderId  string `json:"targetOrderId"`
+	BillDate       string `json:"billDate"`
+	RefundDesc     string `json:"refundDesc"`
+}
+
+type WxAppRefundResp struct {
+	Mid                 string `json:"mid"`
+	RefundStatus        string `json:"refundStatus"`
+	BillDate            string `json:"billDate"`
+	Tid                 string `json:"tid"`
+	InstMid             string `json:"instMid"`
+	RefundOrderId       string `json:"refundOrderId"`
+	RefundTargetOrderId string `json:"refundTargetOrderId"`
+	ResponseTimestamp   string `json:"responseTimestamp"`
+	ErrCode             string `json:"errCode"`
+	Status              string `json:"status"`
+	MerOrderId          string `json:"merOrderId"`
+	RefundAmount        int64  `json:"refundAmount"`
+}
+
+type WxAppRefundQueryReq struct {
+	RequestTimestamp string `json:"requestTimestamp"`
+	MsgId            string `json:"msgId"`
+	Mid              string `json:"mid"`
+	Tid              string `json:"tid"`
+	InstMid          string `json:"instMid"`
+	MerOrderId       string `json:"merOrderId"`
+}
+
+type WxAppRefundQueryResp struct {
+	PayTime             string `json:"payTime"`
+	ConnectSys          string `json:"connectSys"`
+	ErrMsg              string `json:"errMsg"`
+	MerName             string `json:"merName"`
+	Mid                 string `json:"mid"`
+	RefundStatus        string `json:"refundStatus"`
+	SettleDate          string `json:"settleDate"`
+	SettleRefId         string `json:"settleRefId"`
+	Tid                 string `json:"tid"`
+	RefundOrderId       string `json:"refundOrderId"`
+	RefundTargetOrderId string `json:"refundTargetOrderId"`
+	TotalAmount         int64  `json:"totalAmount"`
+	TargetMid           string `json:"targetMid"`
+	ResponseTimestamp   string `json:"responseTimestamp"`
+	ErrCode             string `json:"errCode"`
+	TargetStatus        string `json:"targetStatus"`
+	SeqId               string `json:"seqId"`
+	MerOrderId          string `json:"merOrderId"`
+	Status              string `json:"status"`
+	TargetSys           string `json:"targetSys"`
+}
+
+type WxAppCloseReq struct {
+	RequestTimestamp string `json:"requestTimestamp"`
+	SrcReserve       string `json:"srcReserve"`
+	MerOrderId       string `json:"merOrderId"`
+	Mid              string `json:"mid"`
+	Tid              string `json:"tid"`
+	InstMid          string `json:"instMid"`
+}
+
+type WxAppCloseResp struct {
+	ErrMsg            string `json:"errMsg"`
+	Mid               string `json:"mid"`
+	Tid               string `json:"tid"`
+	InstMid           string `json:"instMid"`
+	ResponseTimestamp string `json:"responseTimestamp"`
+	ErrCode           string `json:"errCode"`
+	MerOrderId        string `json:"merOrderId"`
+	MerName           string `json:"merName"`
+	SeqId             string `json:"seqId"`
+	Status            string `json:"status"`
+	TargetSys         string `json:"targetSys"`
+	TargetStatus      string `json:"targetStatus"`
+	TotalAmount       int64  `json:"totalAmount"`
+}
+
+type CbPayReq struct {
+	QrCodeId         string       `json:"qrCodeId"`
+	SystemId         string       `json:"systemId"`
+	CounterNo        string       `json:"counterNo"`
+	RequestTimestamp string       `json:"requestTimestamp"`
+	BillDesc         string       `json:"billDesc"`
+	Goods            []OrderGoods `json:"goods"`
+	Mid              string       `json:"mid"`
+	MsgId            string       `json:"msgId"`
+	BillDate         string       `json:"billDate"`
+	Tid              string       `json:"tid"`
+	InstMid          string       `json:"instMid"`
+	TotalAmount      string       `json:"totalAmount"`
+}
+
+type CbPayResp struct {
+	QrCodeId          string `json:"qrCodeId"`
+	ErrMsg            string `json:"errMsg"`
+	Mid               string `json:"mid"`
+	BillDate          string `json:"billDate"`
+	Tid               string `json:"tid"`
+	InstMid           string `json:"instMid"`
+	ResponseTimestamp string `json:"responseTimestamp"`
+	ErrCode           string `json:"errCode"`
+	BillNo            string `json:"billNo"`
+	BillQRCode        string `json:"billQRCode"`
+}

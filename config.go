@@ -30,12 +30,17 @@ type gis struct {
 }
 
 const (
-	URI_BC              = "/v4/poslink/transaction/pay"
-	URI_BC_VOID         = "/v2/poslink/transaction/voidpayment"
-	URI_BC_REFUND       = "/v2/poslink/transaction/refund"
-	URI_BC_QUERY        = "/v2/poslink/transaction/query"
-	URI_BC_REFUND_QUERY = "/v2/poslink/transaction/query-refund"
-	URI_WX_APP_PAY      = "/v1/netpay/wx/unified-order"
+	URI_BC_PAY              = "/v4/poslink/transaction/pay"
+	URI_BC_VOID             = "/v2/poslink/transaction/voidpayment"
+	URI_BC_REFUND           = "/v2/poslink/transaction/refund"
+	URI_BC_QUERY            = "/v2/poslink/transaction/query"
+	URI_BC_REFUND_QUERY     = "/v2/poslink/transaction/query-refund"
+	URI_WX_APP_PAY          = "/v1/netpay/wx/unified-order"
+	URI_WX_APP_QUERY        = "/v1/netpay/order-query"
+	URI_WX_APP_REFUND       = "/v1/netpay/refund"
+	URI_WX_APP_REFUND_QUERY = "/v1/netpay/refund-query"
+	URI_WX_APP_CLOSE        = "/v1/netpay/close"
+	URI_CB_PAY              = "/v1/netpay/bills/get-qrcode"
 )
 
 var StoreGISMap = map[string]gis{
