@@ -114,3 +114,46 @@ func TestWxAppPay(t *testing.T) {
 	}
 	t.Log("微信小程序支付结果:", ToJSONPretty(resp))
 }
+
+func TestQRPay(t *testing.T) {
+	req := QrPayReq{
+		TotalAmount: 1,
+		BillNo:      "3GETJH" + time.Now().Format("20060102150405"),
+		NotifyUrl:   "https://www.baidu.com",
+		ReturnUrl:   "https://www.baidu.com",
+		Goods:       nil,
+	}
+	resp, err := Client.QRPay.Pay(&req)
+	if err != nil {
+		t.Log("二维码支付接口调用失败:", err)
+		return
+	}
+	t.Log("二维码支付结果:", ToJSONPretty(resp))
+}
+
+func TestQRPayQuery(t *testing.T) {
+	req := QrPayQueryReq{
+		BillNo:   "3GETJH20250925110003",
+		BillDate: "20250925",
+	}
+	resp, err := Client.QRPay.Query(&req)
+	if err != nil {
+		t.Log("二维码支付查询接口调用失败:", err)
+		return
+	}
+	t.Log("二维码支付查询结果:", ToJSONPretty(resp))
+}
+
+func TestQRPayRefund(t *testing.T) {
+	req := QrPayRefundReq{
+		BillNo:       "3GETJH20250925110003",
+		BillDate:     "20250925",
+		RefundAmount: 1,
+	}
+	resp, err := Client.QRPay.Refund(&req)
+	if err != nil {
+		t.Log("二维码支付退款接口调用失败:", err)
+		return
+	}
+	t.Log("二维码支付退款结果:", ToJSONPretty(resp))
+}

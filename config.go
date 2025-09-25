@@ -40,7 +40,9 @@ const (
 	URI_WX_APP_REFUND       = "/v1/netpay/refund"
 	URI_WX_APP_REFUND_QUERY = "/v1/netpay/refund-query"
 	URI_WX_APP_CLOSE        = "/v1/netpay/close"
-	URI_CB_PAY              = "/v1/netpay/bills/get-qrcode"
+	URI_QR_PAY              = "/v1/netpay/bills/get-qrcode"
+	URI_QR_QUERY            = "/v1/netpay/bills/query"
+	URI_QR_REFUND           = "/v1/netpay/bills/refund"
 )
 
 var StoreGISMap = map[string]gis{

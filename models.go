@@ -238,9 +238,10 @@ type WxAppPayReq struct {
 }
 
 type SubOrder struct {
-	Mid         string `json:"mid "`
-	MerOrderId  string `json:"merOrderId "`
-	TotalAmount int64  `json:"totalAmount "`
+	Mid           string `json:"mid "`
+	MerOrderId    string `json:"merOrderId "`
+	TotalAmount   int64  `json:"totalAmount "`
+	RefundOrderId string `json:"refundOrderId"`
 }
 
 type WxAppPayResp struct {
@@ -304,24 +305,19 @@ type WxAppQueryResp struct {
 }
 
 type WxAppRefundReq struct {
-	RequestTimestamp string `json:"requestTimestamp"`
-	MsgId            string `json:"msgId"`
-	Mid              string `json:"mid"`
-	Tid              string `json:"tid"`
-	SubOrders        []struct {
-		MerOrderId    string `json:"merOrderId"`
-		RefundOrderId string `json:"refundOrderId"`
-		TotalAmount   int64  `json:"totalAmount"`
-		Mid           string `json:"mid"`
-	} `json:"subOrders"`
-	InstMid        string `json:"instMid"`
-	PlatformAmount int64  `json:"platformAmount"`
-	RefundAmount   int64  `json:"refundAmount"`
-	RefundOrderId  string `json:"refundOrderId"`
-	MerOrderId     string `json:"merOrderId"`
-	TargetOrderId  string `json:"targetOrderId"`
-	BillDate       string `json:"billDate"`
-	RefundDesc     string `json:"refundDesc"`
+	RequestTimestamp string     `json:"requestTimestamp"`
+	MsgId            string     `json:"msgId"`
+	Mid              string     `json:"mid"`
+	Tid              string     `json:"tid"`
+	SubOrders        []SubOrder `json:"subOrders"`
+	InstMid          string     `json:"instMid"`
+	PlatformAmount   int64      `json:"platformAmount"`
+	RefundAmount     int64      `json:"refundAmount"`
+	RefundOrderId    string     `json:"refundOrderId"`
+	MerOrderId       string     `json:"merOrderId"`
+	TargetOrderId    string     `json:"targetOrderId"`
+	BillDate         string     `json:"billDate"`
+	RefundDesc       string     `json:"refundDesc"`
 }
 
 type WxAppRefundResp struct {
@@ -396,30 +392,120 @@ type WxAppCloseResp struct {
 	TotalAmount       int64  `json:"totalAmount"`
 }
 
-type CbPayReq struct {
-	QrCodeId         string       `json:"qrCodeId"`
-	SystemId         string       `json:"systemId"`
-	CounterNo        string       `json:"counterNo"`
-	RequestTimestamp string       `json:"requestTimestamp"`
-	BillDesc         string       `json:"billDesc"`
-	Goods            []OrderGoods `json:"goods"`
-	Mid              string       `json:"mid"`
-	MsgId            string       `json:"msgId"`
-	BillDate         string       `json:"billDate"`
-	Tid              string       `json:"tid"`
-	InstMid          string       `json:"instMid"`
-	TotalAmount      string       `json:"totalAmount"`
+// QrPayReq 二维码支付请求参数
+type QrPayReq struct {
+	RequestTimestamp string       `json:"requestTimestamp"` // 请求时间戳，格式为yyyy-MM-dd HH:mm:ss，自动填充为当前时间
+	BillNo           string       `json:"billNo"`           // 订单号，商户订单号唯一
+	BillDesc         string       `json:"billDesc"`         // 订单描述,可以加上具体门店名称
+	BillDate         string       `json:"billDate"`         // 订单日期，格式为yyyy-MM-dd，自动填充为当前日期
+	Goods            []OrderGoods `json:"goods"`            // 订单商品列表，选填
+	Mid              string       `json:"mid"`              // 商户ID，必填，默认值为配置文件中的商户ID
+	Tid              string       `json:"tid"`              // 终端ID，必填，默认值为配置文件中的终端ID
+	MsgId            string       `json:"msgId"`            // 消息ID，选填
+	InstMid          string       `json:"instMid"`          // 机构ID，必填，默认值为配置文件中的机构ID
+	TotalAmount      int64        `json:"totalAmount"`      // 订单金额，必填，单位分
+	NotifyUrl        string       `json:"notifyUrl"`        // 回调通知URL，选填
+	ReturnUrl        string       `json:"returnUrl"`        // 支付完成后跳转URL，选填
+	SubOrders        []SubOrder   `json:"subOrders"`        // 子订单列表，选填
 }
 
-type CbPayResp struct {
-	QrCodeId          string `json:"qrCodeId"`
-	ErrMsg            string `json:"errMsg"`
-	Mid               string `json:"mid"`
-	BillDate          string `json:"billDate"`
-	Tid               string `json:"tid"`
-	InstMid           string `json:"instMid"`
-	ResponseTimestamp string `json:"responseTimestamp"`
-	ErrCode           string `json:"errCode"`
-	BillNo            string `json:"billNo"`
-	BillQRCode        string `json:"billQRCode"`
+// QrPayResp 二维码支付响应参数
+type QrPayResp struct {
+	QrCodeId          string `json:"qrCodeId"`          // 二维码ID
+	SystemId          string `json:"systemId"`          // 系统ID
+	ErrMsg            string `json:"errMsg"`            // 错误信息
+	Mid               string `json:"mid"`               // 商户ID
+	MsgId             string `json:"msgId"`             // 消息ID
+	BillDate          string `json:"billDate"`          // 订单日期，格式为yyyy-MM-dd
+	Tid               string `json:"tid"`               // 终端ID
+	InstMid           string `json:"instMid"`           // 机构ID
+	ResponseTimestamp string `json:"responseTimestamp"` // 响应时间戳，格式为yyyy-MM-dd HH:mm:ss
+	ErrCode           string `json:"errCode"`           // 错误码,SUCCESS表示成功
+	BillNo            string `json:"billNo"`            // 商户订单号
+	BillQRCode        string `json:"billQRCode"`        // 订单二维码，用于扫码支付，前端用些url生成一个二维码
+}
+
+// QrPayQueryReq 二维码支付查询请求参数
+type QrPayQueryReq struct {
+	RequestTimestamp string `json:"requestTimestamp"` // 请求时间戳，格式为yyyy-MM-dd HH:mm:ss，自动填充为当前时间
+	Mid              string `json:"mid"`              // 商户ID
+	Tid              string `json:"tid"`              // 终端ID
+	BillDate         string `json:"billDate"`         // 订单日期，格式为yyyy-MM-dd
+	BillNo           string `json:"billNo"`           // 订单号
+	MsgId            string `json:"msgId"`            // 消息ID
+	InstMid          string `json:"instMid"`          // 机构ID,自动填充为配置文件中的机构ID
+}
+
+// QrPayQueryResp 二维码支付查询响应参数
+type QrPayQueryResp struct {
+	BillPayment struct {
+		PayTime         string `json:"payTime"`         // 支付时间，格式为yyyy-MM-dd HH:mm:ss
+		BuyerCashPayAmt int    `json:"buyerCashPayAmt"` // 买家支付金额，单位分
+		ConnectSys      string `json:"connectSys"`      // 连接系统
+		PaySeqId        string `json:"paySeqId"`        // 支付序列ID
+		InvoiceAmount   int    `json:"invoiceAmount"`   // 发票金额，单位分
+		SettleDate      string `json:"settleDate"`      // 结算日期，格式为yyyy-MM-dd
+		BuyerId         string `json:"buyerId"`         // 买家ID
+		ReceiptAmount   int    `json:"receiptAmount"`   // 发票金额，单位分
+		TotalAmount     int    `json:"totalAmount"`     // 订单金额，单位分
+		CouponAmount    int    `json:"couponAmount"`    // 优惠券金额，单位分
+		BillBizType     string `json:"billBizType"`
+		BuyerPayAmount  int    `json:"buyerPayAmount"` // 买家支付金额，单位分
+		TargetOrderId   string `json:"targetOrderId"`  // 目标订单ID
+		PayDetail       string `json:"payDetail"`      // 支付详情
+		MerOrderId      string `json:"merOrderId"`     // 商户订单ID
+		Status          string `json:"status"`         // 订单状态
+		TargetSys       string `json:"targetSys"`      // 目标系统，微信、支付宝、云闪付
+	} `json:"billPayment"`
+	BillDesc          string `json:"billDesc"`          // 订单描述
+	MerName           string `json:"merName"`           // 商户名称
+	Mid               string `json:"mid"`               // 商户ID
+	MsgId             string `json:"msgId"`             // 消息ID
+	BillDate          string `json:"billDate"`          // 订单日期，格式为yyyy-MM-dd
+	Tid               string `json:"tid"`               // 终端ID
+	InstMid           string `json:"instMid"`           // 机构ID,自动填充为配置文件中的机构ID
+	TotalAmount       int    `json:"totalAmount"`       // 订单金额，单位分
+	CreateTime        string `json:"createTime"`        // 创建时间，格式为yyyy-MM-dd HH:mm:ss
+	ResponseTimestamp string `json:"responseTimestamp"` // 响应时间戳，格式为yyyy-MM-dd HH:mm:ss
+	ErrCode           string `json:"errCode"`           // 错误码,SUCCESS表示成功
+	BillStatus        string `json:"billStatus"`        // 订单状态
+	CardAttr          string `json:"cardAttr"`          // 银行卡属性
+	BillNo            string `json:"billNo"`            // 订单号
+	BillQRCode        string `json:"billQRCode"`        // 订单二维码，用于扫码支付，前端用些url生成一个二维码
+}
+
+// QrPayRefundReq 二维码支付退款请求参数
+type QrPayRefundReq struct {
+	RequestTimestamp string `json:"requestTimestamp"` // 请求时间戳，格式为yyyy-MM-dd HH:mm:ss，自动填充为当前时间
+	MsgId            string `json:"msgId"`            // 消息ID
+	Mid              string `json:"mid"`              // 商户ID
+	Tid              string `json:"tid"`              // 终端ID
+	InstMid          string `json:"instMid"`          // 机构ID,自动填充为配置文件中的机构ID
+	RefundAmount     int64  `json:"refundAmount"`     // 退款金额，单位分
+	BillNo           string `json:"billNo"`           // 订单号
+	BillDate         string `json:"billDate"`         // 订单日期，格式为yyyy-MM-dd
+}
+
+// QrPayRefundResp 二维码支付退款响应参数
+type QrPayRefundResp struct {
+	Mid                 string `json:"mid"`                 // 商户ID
+	MsgId               string `json:"msgId"`               // 消息ID
+	RefundStatus        string `json:"refundStatus"`        // 退款状态
+	BillDate            string `json:"billDate"`            // 订单日期，格式为yyyy-MM-dd
+	SettleDate          string `json:"settleDate"`          // 结算日期，格式为yyyy-MM-dd
+	Tid                 string `json:"tid"`                 // 终端ID
+	InstMid             string `json:"instMid"`             // 机构ID,自动填充为配置文件中的机构ID
+	RefundOrderId       string `json:"refundOrderId"`       // 退款订单ID
+	RefundTargetOrderId string `json:"refundTargetOrderId"` // 退款目标订单ID
+	RefundInvoiceAmount int    `json:"refundInvoiceAmount"` // 退款发票金额，单位分
+	ResponseTimestamp   string `json:"responseTimestamp"`   // 响应时间戳，格式为yyyy-MM-dd HH:mm:ss
+	ErrCode             string `json:"errCode"`             // 错误码,SUCCESS表示成功
+	BillStatus          string `json:"billStatus"`          // 订单状态
+	CardAttr            string `json:"cardAttr"`            // 银行卡属性
+	RefundPayTime       string `json:"refundPayTime"`       // 退款支付时间，格式为yyyy-MM-dd HH:mm:ss
+	BillNo              string `json:"billNo"`              // 订单号
+	BillQRCode          string `json:"billQRCode"`          // 订单二维码，用于扫码支付，前端用些url生成一个二维码
+	MerOrderId          string `json:"merOrderId"`          // 商户订单ID
+	RefundAmount        int    `json:"refundAmount"`        // 退款金额，单位分
+	TargetSys           string `json:"targetSys"`           // 目标系统，微信、支付宝、云闪付
 }
