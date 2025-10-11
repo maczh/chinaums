@@ -509,3 +509,50 @@ type QrPayRefundResp struct {
 	RefundAmount        int    `json:"refundAmount"`        // 退款金额，单位分
 	TargetSys           string `json:"targetSys"`           // 目标系统，微信、支付宝、云闪付
 }
+
+type QrPayNotifyReq struct {
+	Mid            string `json:"mid"  form:"mid"`                      // 商户ID
+	Tid            string `json:"tid"  form:"tid"`                      // 终端ID
+	InstMid        string `json:"instMid" form:"instMid"`               // 机构ID,自动填充为配置文件中的机构ID
+	BillNo         string `json:"billNo" form:"billNo"`                 // 订单号
+	BillQRCode     string `json:"billQRCode" form:"billQRcode"`         // 订单二维码，用于扫码支付，前端用些url生成一个二维码
+	BillDate       string `json:"billDate" form:"billDate"`             // 订单日期，格式为yyyy-MM-dd
+	CreateTime     string `json:"createTime" form:"createTime"`         // 创建时间，格式为yyyy-MM-dd HH:mm:ss
+	BillStatus     string `json:"billStatus" form:"billStatus"`         // 订单状态
+	BillDesc       string `json:"billDesc" form:"billDesc"`             // 订单描述
+	TotalAmount    int64  `json:"totalAmount" form:"totalAmount"`       // 订单金额，单位分
+	MemberId       string `json:"memberId" form:"memberId"`             // 商户会员ID
+	MerName        string `json:"merName" form:"merName"`               // 商户名称
+	Memo           string `json:"memo" form:"memo"`                     // 备注
+	NotifyId       string `json:"notifyId" form:"notifyId"`             // 通知ID
+	SecureStatus   string `json:"secureStatus" form:"secureStatus"`     // 担保状态
+	CompleteAmount int64  `json:"completeAmount" form:"completeAmount"` // 担保完成金额，单位分
+	BillPayment    string `json:"billPayment" form:"billPayment"`       // 账单支付状态,JSON串
+	Sign           string `json:"sign" form:"sign"`                     // 签名
+	BankInfo       string `json:"bankInfo" form:"bankInfo"`             // 银行卡信息
+	BankCardNo     string `json:"bankCardNo" form:"bankCardNo"`         // 银行卡号
+	SeqId          string `json:"seqId" form:"seqId"`                   // 序列号
+	ReceiptAmount  int64  `json:"receiptAmount" form:"receiptAmount"`   // 实收金额，单位分
+	ExtraBuyerInfo string `json:"extraBuyerInfo" form:"extraBuyerInfo"` // 额外买家信息
+	RefundAmount   int64  `json:"refundAmount" form:"refundAmount"`     // 退款金额，单位分
+	RefundDesc     string `json:"refundDesc" form:"refundDesc"`         // 退款描述
+	MchntUuid      string `json:"mchntUuId" form:"mchntUuId"`           // 商户统一商号
+	SubInst        string `json:"subInst" form:"subInst"`               // 子机构ID
+	SrcReserved    string `json:"srcReserved" form:"srcReserved"`       // 备注
+	QrCodeType     string `json:"qrCodeType" form:"qrCodeType"`         // 二维码类型
+}
+
+type QrPayNotifyBillPayment struct {
+	TotalAmount   int    `json:"totalAmount"`   // 订单金额，单位分
+	PayTime       string `json:"payTime"`       // 支付时间，格式为yyyy-MM-dd HH:mm:ss
+	BillBizType   string `json:"billBizType"`   // 账单业务类型
+	TargetOrderId string `json:"targetOrderId"` // 支付应用内部订单ID
+	PaySeqId      string `json:"paySeqId"`      // 支付流水ID
+	InvoiceAmount int    `json:"invoiceAmount"` // 开票金额，单位分
+	PayDetail     string `json:"payDetail"`     // 支付明细
+	SettleDate    string `json:"settleDate"`    // 结算日期，格式为yyyy-MM-dd
+	BuyerId       string `json:"buyerId"`       // 买家ID,对应支付应用的会员ID
+	MerOrderId    string `json:"merOrderId"`    // 商户订单ID
+	Status        string `json:"status"`        // 状态
+	TargetSys     string `json:"targetSys"`     // 支付应用
+}
