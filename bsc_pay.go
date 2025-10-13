@@ -36,8 +36,8 @@ func (b *bscPay) Pay(req *BSCPayReq) (*BSCPayResp, error) {
 	if req.PayCode == "" {
 		return nil, fmt.Errorf("pay code is empty")
 	}
-	if req.StoreId == "" {
-		return nil, fmt.Errorf("store id is empty")
+	if req.Longitude == "" || req.Latitude == "" {
+		return nil, fmt.Errorf("门店经纬度不可为空")
 	}
 	if req.MerchantCode == "" {
 		req.MerchantCode = config.MerchantId
@@ -50,8 +50,8 @@ func (b *bscPay) Pay(req *BSCPayReq) (*BSCPayResp, error) {
 	}
 	req.PayMode = PayModeScan
 	req.DeviceType = DeviceTypeBC
-	req.Longitude = StoreGISMap[req.StoreId].Longitude
-	req.Latitude = StoreGISMap[req.StoreId].Latitude
+	//req.Longitude = StoreGISMap[req.StoreId].Longitude
+	//req.Latitude = StoreGISMap[req.StoreId].Latitude
 	//req.StoreId = strings.ReplaceAll(req.StoreId, "-", "")
 	req.StoreId = ""
 	jsonstr := ToJSON(req)

@@ -440,17 +440,17 @@ type QrPayQueryReq struct {
 type QrPayQueryResp struct {
 	BillPayment struct {
 		PayTime         string `json:"payTime"`         // 支付时间，格式为yyyy-MM-dd HH:mm:ss
-		BuyerCashPayAmt int    `json:"buyerCashPayAmt"` // 买家支付金额，单位分
+		BuyerCashPayAmt int64  `json:"buyerCashPayAmt"` // 买家支付金额，单位分
 		ConnectSys      string `json:"connectSys"`      // 连接系统
 		PaySeqId        string `json:"paySeqId"`        // 支付序列ID
-		InvoiceAmount   int    `json:"invoiceAmount"`   // 发票金额，单位分
+		InvoiceAmount   int64  `json:"invoiceAmount"`   // 发票金额，单位分
 		SettleDate      string `json:"settleDate"`      // 结算日期，格式为yyyy-MM-dd
 		BuyerId         string `json:"buyerId"`         // 买家ID
-		ReceiptAmount   int    `json:"receiptAmount"`   // 发票金额，单位分
-		TotalAmount     int    `json:"totalAmount"`     // 订单金额，单位分
-		CouponAmount    int    `json:"couponAmount"`    // 优惠券金额，单位分
+		ReceiptAmount   int64  `json:"receiptAmount"`   // 发票金额，单位分
+		TotalAmount     int64  `json:"totalAmount"`     // 订单金额，单位分
+		CouponAmount    int64  `json:"couponAmount"`    // 优惠券金额，单位分
 		BillBizType     string `json:"billBizType"`
-		BuyerPayAmount  int    `json:"buyerPayAmount"` // 买家支付金额，单位分
+		BuyerPayAmount  int64  `json:"buyerPayAmount"` // 买家支付金额，单位分
 		TargetOrderId   string `json:"targetOrderId"`  // 目标订单ID
 		PayDetail       string `json:"payDetail"`      // 支付详情
 		MerOrderId      string `json:"merOrderId"`     // 商户订单ID
@@ -464,7 +464,7 @@ type QrPayQueryResp struct {
 	BillDate          string `json:"billDate"`          // 订单日期，格式为yyyy-MM-dd
 	Tid               string `json:"tid"`               // 终端ID
 	InstMid           string `json:"instMid"`           // 机构ID,自动填充为配置文件中的机构ID
-	TotalAmount       int    `json:"totalAmount"`       // 订单金额，单位分
+	TotalAmount       int64  `json:"totalAmount"`       // 订单金额，单位分
 	CreateTime        string `json:"createTime"`        // 创建时间，格式为yyyy-MM-dd HH:mm:ss
 	ResponseTimestamp string `json:"responseTimestamp"` // 响应时间戳，格式为yyyy-MM-dd HH:mm:ss
 	ErrCode           string `json:"errCode"`           // 错误码,SUCCESS表示成功
@@ -543,12 +543,12 @@ type QrPayNotifyReq struct {
 }
 
 type QrPayNotifyBillPayment struct {
-	TotalAmount   int    `json:"totalAmount"`   // 订单金额，单位分
+	TotalAmount   int64  `json:"totalAmount"`   // 订单金额，单位分
 	PayTime       string `json:"payTime"`       // 支付时间，格式为yyyy-MM-dd HH:mm:ss
 	BillBizType   string `json:"billBizType"`   // 账单业务类型
 	TargetOrderId string `json:"targetOrderId"` // 支付应用内部订单ID
 	PaySeqId      string `json:"paySeqId"`      // 支付流水ID
-	InvoiceAmount int    `json:"invoiceAmount"` // 开票金额，单位分
+	InvoiceAmount int64  `json:"invoiceAmount"` // 开票金额，单位分
 	PayDetail     string `json:"payDetail"`     // 支付明细
 	SettleDate    string `json:"settleDate"`    // 结算日期，格式为yyyy-MM-dd
 	BuyerId       string `json:"buyerId"`       // 买家ID,对应支付应用的会员ID
