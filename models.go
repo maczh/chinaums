@@ -1,204 +1,204 @@
 package chinaums
 
 type BSCPayReq struct {
-	MerchantCode            string       `json:"merchantCode"`            //商户ID，必填
-	TerminalCode            string       `json:"terminalCode"`            //终端ID，必填
-	TransactionAmount       int64        `json:"transactionAmount"`       //交易金额，必填，单位分
-	TransactionCurrencyCode string       `json:"transactionCurrencyCode"` //交易币种，必填，默认156，自动填
-	MerchantOrderId         string       `json:"merchantOrderId"`         //商户订单号，必填
-	MerchantRemark          string       `json:"merchantRemark"`          //商户备注，选填
-	PayMode                 string       `json:"payMode"`                 //支付模式，必填，默认CODE_SCAN
-	PayCode                 string       `json:"payCode"`                 //支付条码，必填，支持微信、支付宝、云闪付
-	SrcReserved             string       `json:"srcReserved"`             //保留字段，选填
-	OrderDesc               string       `json:"orderDesc"`               //订单描述，选填，建议注明门店名称
-	StoreId                 string       `json:"storeId"`                 //门店StoreId，必填,UUID，用于自动匹配经纬度
-	OperatorId              string       `json:"operatorId,omitempty"`    //操作员ID，选填
-	Goods                   []OrderGoods `json:"goods,omitempty"`         //订单商品详情，选填
-	SubAppId                string       `json:"subAppId,omitempty"`      //子商户微信公众号ID
-	DeviceType              string       `json:"deviceType"`              //设备类型，必填，默认11
-	SerialNum               string       `json:"serialNum,omitempty"`     //设备序列号，选填
-	Longitude               string       `json:"longitude"`               //门店经度,10位
-	Latitude                string       `json:"latitude"`                //门店纬度,10位
-	IP                      string       `json:"ip,omitempty"`            //门店IP，与经纬度必填一个
+	MerchantCode            string       `json:"merchantCode" bson:"merchantCode"`                       //商户ID，必填
+	TerminalCode            string       `json:"terminalCode" bson:"terminalCode"`                       //终端ID，必填
+	TransactionAmount       int64        `json:"transactionAmount" bson:"transactionAmount"`             //交易金额，必填，单位分
+	TransactionCurrencyCode string       `json:"transactionCurrencyCode" bson:"transactionCurrencyCode"` //交易币种，必填，默认156，自动填
+	MerchantOrderId         string       `json:"merchantOrderId" bson:"merchantOrderId"`                 //商户订单号，必填
+	MerchantRemark          string       `json:"merchantRemark" bson:"merchantRemark"`                   //商户备注，选填
+	PayMode                 string       `json:"payMode" bson:"payMode"`                                 //支付模式，必填，默认CODE_SCAN
+	PayCode                 string       `json:"payCode" bson:"payCode"`                                 //支付条码，必填，支持微信、支付宝、云闪付
+	SrcReserved             string       `json:"srcReserved" bson:"srcReserved"`                         //保留字段，选填
+	OrderDesc               string       `json:"orderDesc" bson:"orderDesc"`                             //订单描述，选填，建议注明门店名称
+	StoreId                 string       `json:"storeId" bson:"storeId"`                                 //门店StoreId，必填,UUID，用于自动匹配经纬度
+	OperatorId              string       `json:"operatorId,omitempty" bson:"operatorId"`                 //操作员ID，选填
+	Goods                   []OrderGoods `json:"goods,omitempty" bson:"goods"`                           //订单商品详情，选填
+	SubAppId                string       `json:"subAppId,omitempty" bson:"subAppId"`                     //子商户微信公众号ID
+	DeviceType              string       `json:"deviceType" bson:"deviceType"`                           //设备类型，必填，默认11
+	SerialNum               string       `json:"serialNum,omitempty" bson:"serialNum"`                   //设备序列号，选填
+	Longitude               string       `json:"longitude" bson:"longitude"`                             //门店经度,10位
+	Latitude                string       `json:"latitude" bson:"latitude"`                               //门店纬度,10位
+	IP                      string       `json:"ip,omitempty" bson:"IP"`                                 //门店IP，与经纬度必填一个
 }
 
 type OrderGoods struct {
-	GoodsId        string `json:"goodsId"`                  //商品ID，选填
-	GoodsName      string `json:"goodsName"`                //商品名称，选填
-	Quantity       int64  `json:"quantity"`                 //商品数量，选填，默认1
-	Price          int64  `json:"price"`                    //商品单价，必填，单位分
-	GoodsCategory  string `json:"goodsCategory"`            //商品分类，选填
-	Body           string `json:"body"`                     //商品描述，选填
-	Unit           string `json:"unit,omitempty"`           //商品单位，选填
-	Discount       int64  `json:"discount"`                 //商品优惠金额，选填，单位分
-	SubMerchantId  string `json:"subMerchantId,omitempty"`  //子商户ID，选填
-	MerOrderId     string `json:"merOrderId,omitempty"`     //子商户订单号，选填
-	SubOrderAmount int64  `json:"subOrderAmount,omitempty"` //子商户订单金额，选填，单位分
+	GoodsId        string `json:"goodsId" bson:"goodsId"`                         //商品ID，选填
+	GoodsName      string `json:"goodsName" bson:"goodsName"`                     //商品名称，选填
+	Quantity       int64  `json:"quantity" bson:"quantity"`                       //商品数量，选填，默认1
+	Price          int64  `json:"price" bson:"price"`                             //商品单价，必填，单位分
+	GoodsCategory  string `json:"goodsCategory" bson:"goodsCategory"`             //商品分类，选填
+	Body           string `json:"body" bson:"body"`                               //商品描述，选填
+	Unit           string `json:"unit,omitempty" bson:"unit"`                     //商品单位，选填
+	Discount       int64  `json:"discount" bson:"discount"`                       //商品优惠金额，选填，单位分
+	SubMerchantId  string `json:"subMerchantId,omitempty" bson:"subMerchantId"`   //子商户ID，选填
+	MerOrderId     string `json:"merOrderId,omitempty" bson:"merOrderId"`         //子商户订单号，选填
+	SubOrderAmount int64  `json:"subOrderAmount,omitempty" bson:"subOrderAmount"` //子商户订单金额，选填，单位分
 }
 
 type BSCPayResp struct {
-	ErrCode                       string `json:"errCode"`                       //错误码
-	ErrInfo                       string `json:"errInfo"`                       //错误信息
-	TransactionTime               string `json:"transactionTime"`               //交易时间，格式HHmmss
-	TransactionDateWithYear       string `json:"transactionDateWithYear"`       //交易日期，格式yyyyMMdd
-	TransactionAmount             int64  `json:"transactionAmount"`             //交易金额，单位分
-	ActualTransactionAmount       int64  `json:"actualTransactionAmount"`       //营销联盟优惠后实际交易金额，单位分
-	Amount                        int64  `json:"amount"`                        //实际支付金额
-	OrderId                       string `json:"orderId"`                       //银商订单号,需保存
-	CardAttr                      string `json:"cardAttr"`                      //银行卡属性
-	MchntName                     string `json:"mchntName"`                     //商户名称
-	TransactionDate               string `json:"transactionDate"`               //交易日期，格式yyyyMMdd
-	SettlementDate                string `json:"settlementDate"`                //结算日期，格式MMdd
-	SettlementDateWithYear        string `json:"settlementDateWithYear"`        //结算日期，格式yyyyMMdd
-	RetrievalRefNum               string `json:"retrievalRefNum"`               //检索参考号
-	SystemTraceNum                string `json:"systemTraceNum"`                //系统跟踪号
-	ChnlType                      string `json:"chnlType"`                      //渠道类型
-	ThirdPartyDiscountInstrution  string `json:"thirdPartyDiscountInstrution"`  //第三方优惠说明
-	ThirdPartyDiscountInstruction string `json:"thirdPartyDiscountInstruction"` //营销联盟优惠说明
-	ThirdPartyName                string `json:"thirdPartyName"`                //第三方名称(微信、支付宝、云闪付)
-	UserId                        string `json:"userId"`                        //第三方用户ID
-	ThirdPartyBuyerId             string `json:"thirdPartyBuyerId"`             //第三方买家ID
-	ThirdPartyOrderId             string `json:"thirdPartyOrderId"`             //第三方订单ID
-	ThirdPartyPayInformation      string `json:"thirdPartyPayInformation"`      //第三方支付信息
-	PromotionAmt                  string `json:"promotionAmt"`                  //营销联盟优惠金额
+	ErrCode                       string `json:"errCode" bson:"errCode"`                                             //错误码
+	ErrInfo                       string `json:"errInfo" bson:"errInfo"`                                             //错误信息
+	TransactionTime               string `json:"transactionTime" bson:"transactionTime"`                             //交易时间，格式HHmmss
+	TransactionDateWithYear       string `json:"transactionDateWithYear" bson:"transactionDateWithYear"`             //交易日期，格式yyyyMMdd
+	TransactionAmount             int64  `json:"transactionAmount" bson:"transactionAmount"`                         //交易金额，单位分
+	ActualTransactionAmount       int64  `json:"actualTransactionAmount" bson:"actualTransactionAmount"`             //营销联盟优惠后实际交易金额，单位分
+	Amount                        int64  `json:"amount" bson:"amount"`                                               //实际支付金额
+	OrderId                       string `json:"orderId" bson:"orderId"`                                             //银商订单号,需保存
+	CardAttr                      string `json:"cardAttr" bson:"cardAttr"`                                           //银行卡属性
+	MchntName                     string `json:"mchntName" bson:"mchntName"`                                         //商户名称
+	TransactionDate               string `json:"transactionDate" bson:"transactionDate"`                             //交易日期，格式yyyyMMdd
+	SettlementDate                string `json:"settlementDate" bson:"settlementDate"`                               //结算日期，格式MMdd
+	SettlementDateWithYear        string `json:"settlementDateWithYear" bson:"settlementDateWithYear"`               //结算日期，格式yyyyMMdd
+	RetrievalRefNum               string `json:"retrievalRefNum" bson:"retrievalRefNum"`                             //检索参考号
+	SystemTraceNum                string `json:"systemTraceNum" bson:"systemTraceNum"`                               //系统跟踪号
+	ChnlType                      string `json:"chnlType" bson:"chnlType"`                                           //渠道类型
+	ThirdPartyDiscountInstrution  string `json:"thirdPartyDiscountInstrution" bson:"thirdPartyDiscountInstrution"`   //第三方优惠说明
+	ThirdPartyDiscountInstruction string `json:"thirdPartyDiscountInstruction" bson:"thirdPartyDiscountInstruction"` //营销联盟优惠说明
+	ThirdPartyName                string `json:"thirdPartyName" bson:"thirdPartyName"`                               //第三方名称(微信、支付宝、云闪付)
+	UserId                        string `json:"userId" bson:"userId"`                                               //第三方用户ID
+	ThirdPartyBuyerId             string `json:"thirdPartyBuyerId" bson:"thirdPartyBuyerId"`                         //第三方买家ID
+	ThirdPartyOrderId             string `json:"thirdPartyOrderId" bson:"thirdPartyOrderId"`                         //第三方订单ID
+	ThirdPartyPayInformation      string `json:"thirdPartyPayInformation" bson:"thirdPartyPayInformation"`           //第三方支付信息
+	PromotionAmt                  string `json:"promotionAmt" bson:"promotionAmt"`                                   //营销联盟优惠金额
 }
 
 // BSCVoidPayReq 撤消支付请求
 type BSCVoidPayReq struct {
-	MerchantCode    string `json:"merchantCode"`             //商户ID
-	TerminalCode    string `json:"terminalCode"`             //终端ID
-	MerchantOrderId string `json:"merchantOrderId"`          //商户订单号
-	OriginalOrderId string `json:"originalOrderId"`          //银商订单号
-	MerchantRemark  string `json:"merchantRemark,omitempty"` //商户备注，选填
+	MerchantCode    string `json:"merchantCode" bson:"merchantCode"`               //商户ID
+	TerminalCode    string `json:"terminalCode" bson:"terminalCode"`               //终端ID
+	MerchantOrderId string `json:"merchantOrderId" bson:"merchantOrderId"`         //商户订单号
+	OriginalOrderId string `json:"originalOrderId" bson:"originalOrderId"`         //银商订单号
+	MerchantRemark  string `json:"merchantRemark,omitempty" bson:"merchantRemark"` //商户备注，选填
 }
 
 type BSCVoidPayResp struct {
-	ErrCode                 string `json:"errCode"`                 //错误码
-	ErrInfo                 string `json:"errInfo"`                 //错误信息
-	TransactionTime         string `json:"transactionTime"`         //交易时间，格式HHmmss
-	TransactionDate         string `json:"transactionDate"`         //交易日期，格式yyyyMMdd
-	SettlementDate          string `json:"settlementDate"`          //结算日期，格式MMdd
-	TransactionDateWithYear string `json:"transactionDateWithYear"` //交易日期，格式yyyyMMdd
-	SettlementDateWithYear  string `json:"settlementDateWithYear"`  //结算日期，格式yyyyMMdd
-	RetrievalRefNum         string `json:"retrievalRefNum"`         //检索参考号
-	ThirdPartyName          string `json:"thirdPartyName"`          //第三方名称(微信、支付宝、云闪付)
-	TransactionAmount       int64  `json:"transactionAmount"`       //交易金额，单位分
-	CardAttr                string `json:"cardAttr"`                //银行卡属性
-	OrderId                 string `json:"orderId"`                 //银商订单号
+	ErrCode                 string `json:"errCode" bson:"errCode"`                                 //错误码
+	ErrInfo                 string `json:"errInfo" bson:"errInfo"`                                 //错误信息
+	TransactionTime         string `json:"transactionTime" bson:"transactionTime"`                 //交易时间，格式HHmmss
+	TransactionDate         string `json:"transactionDate" bson:"transactionDate"`                 //交易日期，格式yyyyMMdd
+	SettlementDate          string `json:"settlementDate" bson:"settlementDate"`                   //结算日期，格式MMdd
+	TransactionDateWithYear string `json:"transactionDateWithYear" bson:"transactionDateWithYear"` //交易日期，格式yyyyMMdd
+	SettlementDateWithYear  string `json:"settlementDateWithYear" bson:"settlementDateWithYear"`   //结算日期，格式yyyyMMdd
+	RetrievalRefNum         string `json:"retrievalRefNum" bson:"retrievalRefNum"`                 //检索参考号
+	ThirdPartyName          string `json:"thirdPartyName" bson:"thirdPartyName"`                   //第三方名称(微信、支付宝、云闪付)
+	TransactionAmount       int64  `json:"transactionAmount" bson:"transactionAmount"`             //交易金额，单位分
+	CardAttr                string `json:"cardAttr" bson:"cardAttr"`                               //银行卡属性
+	OrderId                 string `json:"orderId" bson:"orderId"`                                 //银商订单号
 }
 
 // BSCRefundReq 退款请求
 type BSCRefundReq struct {
-	MerchantCode      string       `json:"merchantCode"`    //商户ID
-	TerminalCode      string       `json:"terminalCode"`    //终端ID
-	MerchantOrderId   string       `json:"merchantOrderId"` //商户订单号
-	OriginalOrderId   string       `json:"originalOrderId"` //银商订单号
-	MerchantRemark    string       `json:"merchantRemark,omitempty"`
-	RefundRequestId   string       `json:"refundRequestId"`      //退款请求号,必填，唯一，小于50位
-	TransactionAmount int64        `json:"transactionAmount"`    //退款金额,必填，单位分
-	Goods             []OrderGoods `json:"goods,omitempty"`      //商品列表，选填
-	StoreId           string       `json:"storeId,omitempty"`    //门店StoreId
-	OperatorId        string       `json:"operatorId,omitempty"` //操作员ID
-	RefundDesc        string       `json:"refundDesc,omitempty"` //退款描述
+	MerchantCode      string       `json:"merchantCode" bson:"merchantCode"`               //商户ID
+	TerminalCode      string       `json:"terminalCode" bson:"terminalCode"`               //终端ID
+	MerchantOrderId   string       `json:"merchantOrderId" bson:"merchantOrderId"`         //商户订单号
+	OriginalOrderId   string       `json:"originalOrderId" bson:"originalOrderId"`         //银商订单号
+	MerchantRemark    string       `json:"merchantRemark,omitempty" bson:"merchantRemark"` //商户备注，选填
+	RefundRequestId   string       `json:"refundRequestId" bson:"refundRequestId"`         //退款请求号,必填，唯一，小于50位
+	TransactionAmount int64        `json:"transactionAmount" bson:"transactionAmount"`     //退款金额,必填，单位分
+	Goods             []OrderGoods `json:"goods,omitempty" bson:"goods"`                   //商品列表，选填
+	StoreId           string       `json:"storeId,omitempty" bson:"storeId"`               //门店StoreId
+	OperatorId        string       `json:"operatorId,omitempty" bson:"operatorId"`         //操作员ID
+	RefundDesc        string       `json:"refundDesc,omitempty" bson:"refundDesc"`         //退款描述
 }
 
 // BSCRefundResp 退款响应
 type BSCRefundResp struct {
-	ErrCode                 string `json:"errCode"`                       //错误码
-	ErrInfo                 string `json:"errInfo"`                       //错误信息
-	TransactionTime         string `json:"transactionTime"`               //交易时间，格式HHmmss
-	TransactionDate         string `json:"transactionDate"`               //交易日期，格式yyyyMMdd
-	SettlementDate          string `json:"settlementDate"`                //结算日期，格式MMdd
-	TransactionDateWithYear string `json:"transactionDateWithYear"`       //交易日期，格式yyyyMMdd
-	SettlementDateWithYear  string `json:"settlementDateWithYear"`        //结算日期，格式yyyyMMdd
-	RetrievalRefNum         string `json:"retrievalRefNum"`               //检索参考号
-	ThirdPartyName          string `json:"thirdPartyName"`                //第三方名称(微信、支付宝、云闪付)
-	CardAttr                string `json:"cardAttr"`                      //银行卡属性
-	RefundInvoiceAmount     string `json:"refundInvoiceAmount"`           //退款发票金额，单位分
-	TransactionAmount       int64  `json:"transactionAmount"`             //退款金额，单位分
-	RefundPromotionList     string `json:"refundPromotionList,omitempty"` //退款营销联盟优惠列表
-	SystemTraceNum          string `json:"systemTraceNum"`                //系统跟踪号
-	ChnlType                string `json:"chnlType"`                      //渠道类型
-	AcqInstCode             string `json:"acqInstCode"`                   // acquiring institution code
-	OrderId                 string `json:"orderId"`                       //银商订单号
-	RefundOrderId           string `json:"refundOrderId"`                 //退款订单号
-	RefundTargetOrderId     string `json:"refundTargetOrderId"`           //退款目标订单号
+	ErrCode                 string `json:"errCode" bson:"errCode"`                                   //错误码
+	ErrInfo                 string `json:"errInfo" bson:"errInfo"`                                   //错误信息
+	TransactionTime         string `json:"transactionTime" bson:"transactionTime"`                   //交易时间，格式HHmmss
+	TransactionDate         string `json:"transactionDate" bson:"transactionDate"`                   //交易日期，格式yyyyMMdd
+	SettlementDate          string `json:"settlementDate" bson:"settlementDate"`                     //结算日期，格式MMdd
+	TransactionDateWithYear string `json:"transactionDateWithYear" bson:"transactionDateWithYear"`   //交易日期，格式yyyyMMdd
+	SettlementDateWithYear  string `json:"settlementDateWithYear" bson:"settlementDateWithYear"`     //结算日期，格式yyyyMMdd
+	RetrievalRefNum         string `json:"retrievalRefNum" bson:"retrievalRefNum"`                   //检索参考号
+	ThirdPartyName          string `json:"thirdPartyName" bson:"thirdPartyName"`                     //第三方名称(微信、支付宝、云闪付)
+	CardAttr                string `json:"cardAttr" bson:"cardAttr"`                                 //银行卡属性
+	RefundInvoiceAmount     string `json:"refundInvoiceAmount" bson:"refundInvoiceAmount"`           //退款发票金额，单位分
+	TransactionAmount       int64  `json:"transactionAmount" bson:"transactionAmount"`               //退款金额，单位分
+	RefundPromotionList     string `json:"refundPromotionList,omitempty" bson:"refundPromotionList"` //退款营销联盟优惠列表
+	SystemTraceNum          string `json:"systemTraceNum" bson:"systemTraceNum"`                     //系统跟踪号
+	ChnlType                string `json:"chnlType" bson:"chnlType"`                                 //渠道类型
+	AcqInstCode             string `json:"acqInstCode" bson:"acqInstCode"`                           // acquiring institution code
+	OrderId                 string `json:"orderId" bson:"orderId"`                                   //银商订单号
+	RefundOrderId           string `json:"refundOrderId" bson:"refundOrderId"`                       //退款订单号
+	RefundTargetOrderId     string `json:"refundTargetOrderId" bson:"refundTargetOrderId"`           //退款目标订单号
 }
 
 // BSCQueryReq 支付查询请求
 type BSCQueryReq struct {
-	MerchantCode    string `json:"merchantCode"`    //商户ID
-	TerminalCode    string `json:"terminalCode"`    //终端ID
-	MerchantOrderId string `json:"merchantOrderId"` //商户订单号
-	OriginalOrderId string `json:"originalOrderId"` //银商订单号
-	OriTransDate    string `json:"oriTransDate"`    //原交易日期,格式YYYYMMDD
+	MerchantCode    string `json:"merchantCode" bson:"merchantCode"`       //商户ID
+	TerminalCode    string `json:"terminalCode" bson:"terminalCode"`       //终端ID
+	MerchantOrderId string `json:"merchantOrderId" bson:"merchantOrderId"` //商户订单号
+	OriginalOrderId string `json:"originalOrderId" bson:"originalOrderId"` //银商订单号
+	OriTransDate    string `json:"oriTransDate" bson:"oriTransDate"`       //原交易日期,格式YYYYMMDD
 }
 
 // BSCQueryResp 支付查询响应
 type BSCQueryResp struct {
-	ErrCode                   string `json:"errCode"`                 //错误码
-	ErrInfo                   string `json:"errInfo"`                 //错误信息
-	OriginalTransactionTime   string `json:"originalTransactionTime"` //原交易时间，格式HHmmss
-	QueryResCode              string `json:"queryResCode"`            //查询结果码
-	QueryResDesc              string `json:"queryResDesc"`            //查询结果描述
-	OriginalPayCode           string `json:"originalPayCode"`         //原支付条码
-	OriginalBatchNo           string `json:"originalBatchNo"`         //原批次号
-	OriginalSystemTraceNum    string `json:"originalSystemTraceNum"`  //原系统跟踪号
-	OriginalRetrievalRefNum   string `json:"originalRetrievalRefNum"`
-	OrigialRetrievalRefNum    string `json:"origialRetrievalRefNum"`
-	OriginalTransactionAmount int64  `json:"originalTransactionAmount"` //原交易金额，单位分
-	Amount                    int64  `json:"amount"`                    //交易金额，单位分
-	RefundedAmount            int64  `json:"refundedAmount"`            //已退款金额，单位分
-	RefundAmonunt             int64  `json:"refundAmonunt"`             //退款金额，单位分
-	ActualTransactionAmount   int64  `json:"actualTransactionAmount"`   //实际交易金额，单位分
-	ThirdPartyName            string `json:"thirdPartyName"`            //第三方名称(微信、支付宝、云闪付)
-	ThirdPartyBuyerId         string `json:"thirdPartyBuyerId"`         //第三方买家ID
-	ThirdPartyOrderId         string `json:"thirdPartyOrderId"`         //第三方订单号
-	ThirdPartyPayInformation  string `json:"thirdPartyPayInformation"`  //第三方支付信息
-	OrderId                   string `json:"orderId"`                   //银商订单号
-	MerchantOrderId           string `json:"merchantOrderId"`           //商户订单号
-	OrderStatus               string `json:"orderStatus"`               //订单状态
-	OrderCloseTime            string `json:"orderCloseTime"`            //订单关闭时间
-	OriginalSettlementDate    string `json:"originalSettlementDate"`    //原结算日期，格式MMdd
-	MchntName                 string `json:"mchntName"`                 //商户名称
-	IssInstCode               string `json:"issInstCode"`               //发卡机构代码
+	ErrCode                   string `json:"errCode" bson:"errCode"`                                 //错误码
+	ErrInfo                   string `json:"errInfo" bson:"errInfo"`                                 //错误信息
+	OriginalTransactionTime   string `json:"originalTransactionTime" bson:"originalTransactionTime"` //原交易时间，格式HHmmss
+	QueryResCode              string `json:"queryResCode" bson:"queryResCode"`                       //查询结果码
+	QueryResDesc              string `json:"queryResDesc" bson:"queryResDesc"`                       //查询结果描述
+	OriginalPayCode           string `json:"originalPayCode" bson:"originalPayCode"`                 //原支付条码
+	OriginalBatchNo           string `json:"originalBatchNo" bson:"originalBatchNo"`                 //原批次号
+	OriginalSystemTraceNum    string `json:"originalSystemTraceNum" bson:"originalSystemTraceNum"`   //原系统跟踪号
+	OriginalRetrievalRefNum   string `json:"originalRetrievalRefNum" bson:"originalRetrievalRefNum"`
+	OrigialRetrievalRefNum    string `json:"origialRetrievalRefNum" bson:"origialRetrievalRefNum"`
+	OriginalTransactionAmount int64  `json:"originalTransactionAmount" bson:"originalTransactionAmount"` //原交易金额，单位分
+	Amount                    int64  `json:"amount" bson:"amount"`                                       //交易金额，单位分
+	RefundedAmount            int64  `json:"refundedAmount" bson:"refundedAmount"`                       //已退款金额，单位分
+	RefundAmonunt             int64  `json:"refundAmonunt" bson:"refundAmonunt"`                         //退款金额，单位分
+	ActualTransactionAmount   int64  `json:"actualTransactionAmount" bson:"actualTransactionAmount"`     //实际交易金额，单位分
+	ThirdPartyName            string `json:"thirdPartyName" bson:"thirdPartyName"`                       //第三方名称(微信、支付宝、云闪付)
+	ThirdPartyBuyerId         string `json:"thirdPartyBuyerId" bson:"thirdPartyBuyerId"`                 //第三方买家ID
+	ThirdPartyOrderId         string `json:"thirdPartyOrderId" bson:"thirdPartyOrderId"`                 //第三方订单号
+	ThirdPartyPayInformation  string `json:"thirdPartyPayInformation" bson:"thirdPartyPayInformation"`   //第三方支付信息
+	OrderId                   string `json:"orderId" bson:"orderId"`                                     //银商订单号
+	MerchantOrderId           string `json:"merchantOrderId" bson:"merchantOrderId"`                     //商户订单号
+	OrderStatus               string `json:"orderStatus" bson:"orderStatus"`                             //订单状态
+	OrderCloseTime            string `json:"orderCloseTime" bson:"orderCloseTime"`                       //订单关闭时间
+	OriginalSettlementDate    string `json:"originalSettlementDate" bson:"originalSettlementDate"`       //原结算日期，格式MMdd
+	MchntName                 string `json:"mchntName" bson:"mchntName"`                                 //商户名称
+	IssInstCode               string `json:"issInstCode" bson:"issInstCode"`                             //发卡机构代码
 }
 
 // BSCRefundQueryReq 退款查询请求
 type BSCRefundQueryReq struct {
-	MerchantCode    string `json:"merchantCode"`    //商户ID
-	TerminalCode    string `json:"terminalCode"`    //终端ID
-	MerchantOrderId string `json:"merchantOrderId"` //商户订单号
-	OriginalOrderId string `json:"originalOrderId"` //银商订单号
-	RefundRequestId string `json:"refundRequestId"` //退款请求号
-	OriTransDate    string `json:"oriTransDate"`    //原交易日期,格式YYYYMMDD
+	MerchantCode    string `json:"merchantCode" bson:"merchantCode"`       //商户ID
+	TerminalCode    string `json:"terminalCode" bson:"terminalCode"`       //终端ID
+	MerchantOrderId string `json:"merchantOrderId" bson:"merchantOrderId"` //商户订单号
+	OriginalOrderId string `json:"originalOrderId" bson:"originalOrderId"` //银商订单号
+	RefundRequestId string `json:"refundRequestId" bson:"refundRequestId"` //退款请求号
+	OriTransDate    string `json:"oriTransDate" bson:"oriTransDate"`       //原交易日期,格式YYYYMMDD
 }
 
 // BSCRefundQueryResp 退款查询响应
 type BSCRefundQueryResp struct {
-	ErrCode                 string `json:"errCode"`                 //错误码
-	ErrInfo                 string `json:"errInfo"`                 //错误信息
-	TransactionTime         string `json:"transactionTime"`         //交易时间，格式HHmmss
-	TransactionDate         string `json:"transactionDate"`         //交易日期，格式YYYYMMDD
-	SettlementDate          string `json:"settlementDate"`          //结算日期，格式MMdd
-	RetrievalRefNum         string `json:"retrievalRefNum"`         //检索参考号
-	QueryResCode            string `json:"queryResCode"`            //查询结果码
-	PayCode                 string `json:"payCode"`                 //支付条码
-	DealDate                string `json:"dealDate"`                //交易日期，格式YYYYMMDD
-	DealTime                string `json:"dealTime"`                //交易时间，格式HHmmss
-	OriginalAmount          int64  `json:"originalAmount"`          //原交易金额，单位分
-	DealType                string `json:"dealType"`                //交易类型
-	DealSystemTraceNum      string `json:"dealSystemTraceNum"`      //交易系统跟踪号
-	DealRetrievalRefNum     string `json:"dealRetrievalRefNum"`     //交易检索参考号
-	BatchNo                 string `json:"batchNo"`                 //批次号
-	OriginalTransactionDate string `json:"originalTransactionDate"` //原交易日期，格式YYYYMMDD
-	OrigialRetrievalRefNum  string `json:"origialRetrievalRefNum"`
-	OriginalSettlementDate  string `json:"originalSettlementDate"` //原结算日期，格式MMdd
-	RefundInvoiceAmount     string `json:"refundInvoiceAmount"`    //退款发票金额，单位分
-	RefundPromotionList     string `json:"refundPromotionList"`    //退款优惠列表
-	ThirdPartyName          string `json:"thirdPartyName"`         //第三方名称(微信、支付宝、云闪付)
-	RefundOrderId           string `json:"refundOrderId"`          //退款订单号
-	RefundTargetOrderId     string `json:"refundTargetOrderId"`    //退款目标订单号
+	ErrCode                 string `json:"errCode" bson:"errCode"`                                 //错误码
+	ErrInfo                 string `json:"errInfo" bson:"errInfo"`                                 //错误信息
+	TransactionTime         string `json:"transactionTime" bson:"transactionTime"`                 //交易时间，格式HHmmss
+	TransactionDate         string `json:"transactionDate" bson:"transactionDate"`                 //交易日期，格式YYYYMMDD
+	SettlementDate          string `json:"settlementDate" bson:"settlementDate"`                   //结算日期，格式MMdd
+	RetrievalRefNum         string `json:"retrievalRefNum" bson:"retrievalRefNum"`                 //检索参考号
+	QueryResCode            string `json:"queryResCode" bson:"queryResCode"`                       //查询结果码
+	PayCode                 string `json:"payCode" bson:"payCode"`                                 //支付条码
+	DealDate                string `json:"dealDate" bson:"dealDate"`                               //交易日期，格式YYYYMMDD
+	DealTime                string `json:"dealTime" bson:"dealTime"`                               //交易时间，格式HHmmss
+	OriginalAmount          int64  `json:"originalAmount" bson:"originalAmount"`                   //原交易金额，单位分
+	DealType                string `json:"dealType" bson:"dealType"`                               //交易类型
+	DealSystemTraceNum      string `json:"dealSystemTraceNum" bson:"dealSystemTraceNum"`           //交易系统跟踪号
+	DealRetrievalRefNum     string `json:"dealRetrievalRefNum" bson:"dealRetrievalRefNum"`         //交易检索参考号
+	BatchNo                 string `json:"batchNo" bson:"batchNo"`                                 //批次号
+	OriginalTransactionDate string `json:"originalTransactionDate" bson:"originalTransactionDate"` //原交易日期，格式YYYYMMDD
+	OrigialRetrievalRefNum  string `json:"origialRetrievalRefNum" bson:"origialRetrievalRefNum"`
+	OriginalSettlementDate  string `json:"originalSettlementDate" bson:"originalSettlementDate"` //原结算日期，格式MMdd
+	RefundInvoiceAmount     string `json:"refundInvoiceAmount" bson:"refundInvoiceAmount"`       //退款发票金额，单位分
+	RefundPromotionList     string `json:"refundPromotionList" bson:"refundPromotionList"`       //退款优惠列表
+	ThirdPartyName          string `json:"thirdPartyName" bson:"thirdPartyName"`                 //第三方名称(微信、支付宝、云闪付)
+	RefundOrderId           string `json:"refundOrderId" bson:"refundOrderId"`                   //退款订单号
+	RefundTargetOrderId     string `json:"refundTargetOrderId" bson:"refundTargetOrderId"`       //退款目标订单号
 }
 
 type WxAppPayReq struct {
@@ -394,152 +394,152 @@ type WxAppCloseResp struct {
 
 // QrPayReq 二维码支付请求参数
 type QrPayReq struct {
-	RequestTimestamp string       `json:"requestTimestamp"` // 请求时间戳，格式为yyyy-MM-dd HH:mm:ss，自动填充为当前时间
-	BillNo           string       `json:"billNo"`           // 订单号，商户订单号唯一
-	BillDesc         string       `json:"billDesc"`         // 订单描述,可以加上具体门店名称
-	BillDate         string       `json:"billDate"`         // 订单日期，格式为yyyy-MM-dd，自动填充为当前日期
-	Goods            []OrderGoods `json:"goods"`            // 订单商品列表，选填
-	Mid              string       `json:"mid"`              // 商户ID，必填，默认值为配置文件中的商户ID
-	Tid              string       `json:"tid"`              // 终端ID，必填，默认值为配置文件中的终端ID
-	MsgId            string       `json:"msgId"`            // 消息ID，选填
-	InstMid          string       `json:"instMid"`          // 机构ID，必填，默认值为配置文件中的机构ID
-	TotalAmount      int64        `json:"totalAmount"`      // 订单金额，必填，单位分
-	NotifyUrl        string       `json:"notifyUrl"`        // 回调通知URL，选填
-	ReturnUrl        string       `json:"returnUrl"`        // 支付完成后跳转URL，选填
-	SubOrders        []SubOrder   `json:"subOrders"`        // 子订单列表，选填
+	RequestTimestamp string       `json:"requestTimestamp" bson:"requestTimestamp"` // 请求时间戳，格式为yyyy-MM-dd HH:mm:ss，自动填充为当前时间
+	BillNo           string       `json:"billNo" bson:"billNo"`                     // 订单号，商户订单号唯一
+	BillDesc         string       `json:"billDesc" bson:"billDesc"`                 // 订单描述,可以加上具体门店名称
+	BillDate         string       `json:"billDate" bson:"billDate"`                 // 订单日期，格式为yyyy-MM-dd，自动填充为当前日期
+	Goods            []OrderGoods `json:"goods" bson:"goods"`                       // 订单商品列表，选填
+	Mid              string       `json:"mid" bson:"mid"`                           // 商户ID，必填，默认值为配置文件中的商户ID
+	Tid              string       `json:"tid" bson:"tid"`                           // 终端ID，必填，默认值为配置文件中的终端ID
+	MsgId            string       `json:"msgId" bson:"msgId"`                       // 消息ID，选填
+	InstMid          string       `json:"instMid" bson:"instMid"`                   // 机构ID，必填，默认值为配置文件中的机构ID
+	TotalAmount      int64        `json:"totalAmount" bson:"totalAmount"`           // 订单金额，必填，单位分
+	NotifyUrl        string       `json:"notifyUrl" bson:"notifyUrl"`               // 回调通知URL，选填
+	ReturnUrl        string       `json:"returnUrl" bson:"returnUrl"`               // 支付完成后跳转URL，选填
+	SubOrders        []SubOrder   `json:"subOrders" bson:"subOrders"`               // 子订单列表，选填
 }
 
 // QrPayResp 二维码支付响应参数
 type QrPayResp struct {
-	QrCodeId          string `json:"qrCodeId"`          // 二维码ID
-	SystemId          string `json:"systemId"`          // 系统ID
-	ErrMsg            string `json:"errMsg"`            // 错误信息
-	Mid               string `json:"mid"`               // 商户ID
-	MsgId             string `json:"msgId"`             // 消息ID
-	BillDate          string `json:"billDate"`          // 订单日期，格式为yyyy-MM-dd
-	Tid               string `json:"tid"`               // 终端ID
-	InstMid           string `json:"instMid"`           // 机构ID
-	ResponseTimestamp string `json:"responseTimestamp"` // 响应时间戳，格式为yyyy-MM-dd HH:mm:ss
-	ErrCode           string `json:"errCode"`           // 错误码,SUCCESS表示成功
-	BillNo            string `json:"billNo"`            // 商户订单号
-	BillQRCode        string `json:"billQRCode"`        // 订单二维码，用于扫码支付，前端用些url生成一个二维码
+	QrCodeId          string `json:"qrCodeId" bson:"qrCodeId"`                   // 二维码ID
+	SystemId          string `json:"systemId" bson:"systemId"`                   // 系统ID
+	ErrMsg            string `json:"errMsg" bson:"errMsg"`                       // 错误信息
+	Mid               string `json:"mid" bson:"mid"`                             // 商户ID
+	MsgId             string `json:"msgId" bson:"msgId"`                         // 消息ID
+	BillDate          string `json:"billDate" bson:"billDate"`                   // 订单日期，格式为yyyy-MM-dd
+	Tid               string `json:"tid" bson:"tid"`                             // 终端ID
+	InstMid           string `json:"instMid" bson:"instMid"`                     // 机构ID
+	ResponseTimestamp string `json:"responseTimestamp" bson:"responseTimestamp"` // 响应时间戳，格式为yyyy-MM-dd HH:mm:ss
+	ErrCode           string `json:"errCode" bson:"errCode"`                     // 错误码,SUCCESS表示成功
+	BillNo            string `json:"billNo" bson:"billNo"`                       // 商户订单号
+	BillQRCode        string `json:"billQRCode" bson:"billQRCode"`               // 订单二维码，用于扫码支付，前端用些url生成一个二维码
 }
 
 // QrPayQueryReq 二维码支付查询请求参数
 type QrPayQueryReq struct {
-	RequestTimestamp string `json:"requestTimestamp"` // 请求时间戳，格式为yyyy-MM-dd HH:mm:ss，自动填充为当前时间
-	Mid              string `json:"mid"`              // 商户ID
-	Tid              string `json:"tid"`              // 终端ID
-	BillDate         string `json:"billDate"`         // 订单日期，格式为yyyy-MM-dd
-	BillNo           string `json:"billNo"`           // 订单号
-	MsgId            string `json:"msgId"`            // 消息ID
-	InstMid          string `json:"instMid"`          // 机构ID,自动填充为配置文件中的机构ID
+	RequestTimestamp string `json:"requestTimestamp" bson:"requestTimestamp"` // 请求时间戳，格式为yyyy-MM-dd HH:mm:ss，自动填充为当前时间
+	Mid              string `json:"mid" bson:"mid"`                           // 商户ID
+	Tid              string `json:"tid" bson:"tid"`                           // 终端ID,自动填充为配置文件中的终端ID
+	BillDate         string `json:"billDate" bson:"billDate"`                 // 订单日期，格式为yyyy-MM-dd
+	BillNo           string `json:"billNo" bson:"billNo"`                     // 订单号
+	MsgId            string `json:"msgId" bson:"msgId"`                       // 消息ID
+	InstMid          string `json:"instMid" bson:"instMid"`                   // 机构ID,自动填充为配置文件中的机构ID
 }
 
 // QrPayQueryResp 二维码支付查询响应参数
 type QrPayQueryResp struct {
 	BillPayment struct {
-		PayTime         string `json:"payTime"`         // 支付时间，格式为yyyy-MM-dd HH:mm:ss
-		BuyerCashPayAmt int64  `json:"buyerCashPayAmt"` // 买家支付金额，单位分
-		ConnectSys      string `json:"connectSys"`      // 连接系统
-		PaySeqId        string `json:"paySeqId"`        // 支付序列ID
-		InvoiceAmount   int64  `json:"invoiceAmount"`   // 发票金额，单位分
-		SettleDate      string `json:"settleDate"`      // 结算日期，格式为yyyy-MM-dd
-		BuyerId         string `json:"buyerId"`         // 买家ID
-		ReceiptAmount   int64  `json:"receiptAmount"`   // 发票金额，单位分
-		TotalAmount     int64  `json:"totalAmount"`     // 订单金额，单位分
-		CouponAmount    int64  `json:"couponAmount"`    // 优惠券金额，单位分
-		BillBizType     string `json:"billBizType"`
-		BuyerPayAmount  int64  `json:"buyerPayAmount"` // 买家支付金额，单位分
-		TargetOrderId   string `json:"targetOrderId"`  // 目标订单ID
-		PayDetail       string `json:"payDetail"`      // 支付详情
-		MerOrderId      string `json:"merOrderId"`     // 商户订单ID
-		Status          string `json:"status"`         // 订单状态
-		TargetSys       string `json:"targetSys"`      // 目标系统，微信、支付宝、云闪付
+		PayTime         string `json:"payTime" bson:"payTime"`                 // 支付时间，格式为yyyy-MM-dd HH:mm:ss
+		BuyerCashPayAmt int64  `json:"buyerCashPayAmt" bson:"buyerCashPayAmt"` // 买家支付金额，单位分
+		ConnectSys      string `json:"connectSys" bson:"connectSys"`           // 连接系统
+		PaySeqId        string `json:"paySeqId" bson:"paySeqId"`               // 支付序列ID
+		InvoiceAmount   int64  `json:"invoiceAmount" bson:"invoiceAmount"`     // 发票金额，单位分
+		SettleDate      string `json:"settleDate" bson:"settleDate"`           // 结算日期，格式为yyyy-MM-dd
+		BuyerId         string `json:"buyerId" bson:"buyerId"`                 // 买家ID
+		ReceiptAmount   int64  `json:"receiptAmount" bson:"receiptAmount"`     // 发票金额，单位分
+		TotalAmount     int64  `json:"totalAmount" bson:"totalAmount"`         // 订单金额，单位分
+		CouponAmount    int64  `json:"couponAmount" bson:"couponAmount"`       // 优惠券金额，单位分
+		BillBizType     string `json:"billBizType" bson:"billBizType"`
+		BuyerPayAmount  int64  `json:"buyerPayAmount" bson:"buyerPayAmount"` // 买家支付金额，单位分
+		TargetOrderId   string `json:"targetOrderId" bson:"targetOrderId"`   // 目标订单ID
+		PayDetail       string `json:"payDetail" bson:"payDetail"`           // 支付详情
+		MerOrderId      string `json:"merOrderId" bson:"merOrderId"`         // 商户订单ID
+		Status          string `json:"status" bson:"status"`                 // 订单状态
+		TargetSys       string `json:"targetSys" bson:"targetSys"`           // 目标系统，微信、支付宝、云闪付
 	} `json:"billPayment"`
-	BillDesc          string `json:"billDesc"`          // 订单描述
-	MerName           string `json:"merName"`           // 商户名称
-	Mid               string `json:"mid"`               // 商户ID
-	MsgId             string `json:"msgId"`             // 消息ID
-	BillDate          string `json:"billDate"`          // 订单日期，格式为yyyy-MM-dd
-	Tid               string `json:"tid"`               // 终端ID
-	InstMid           string `json:"instMid"`           // 机构ID,自动填充为配置文件中的机构ID
-	TotalAmount       int64  `json:"totalAmount"`       // 订单金额，单位分
-	CreateTime        string `json:"createTime"`        // 创建时间，格式为yyyy-MM-dd HH:mm:ss
-	ResponseTimestamp string `json:"responseTimestamp"` // 响应时间戳，格式为yyyy-MM-dd HH:mm:ss
-	ErrCode           string `json:"errCode"`           // 错误码,SUCCESS表示成功
-	BillStatus        string `json:"billStatus"`        // 订单状态
-	CardAttr          string `json:"cardAttr"`          // 银行卡属性
-	BillNo            string `json:"billNo"`            // 订单号
-	BillQRCode        string `json:"billQRCode"`        // 订单二维码，用于扫码支付，前端用些url生成一个二维码
+	BillDesc          string `json:"billDesc" bson:"billDesc"`                   // 订单描述
+	MerName           string `json:"merName" bson:"merName"`                     // 商户名称
+	Mid               string `json:"mid" bson:"mid"`                             // 商户ID
+	MsgId             string `json:"msgId" bson:"msgId"`                         // 消息ID
+	BillDate          string `json:"billDate" bson:"billDate"`                   // 订单日期，格式为yyyy-MM-dd
+	Tid               string `json:"tid" bson:"tid"`                             // 终端ID
+	InstMid           string `json:"instMid" bson:"instMid"`                     // 机构ID,自动填充为配置文件中的机构ID
+	TotalAmount       int64  `json:"totalAmount" bson:"totalAmount"`             // 订单金额，单位分
+	CreateTime        string `json:"createTime" bson:"createTime"`               // 创建时间，格式为yyyy-MM-dd HH:mm:ss
+	ResponseTimestamp string `json:"responseTimestamp" bson:"responseTimestamp"` // 响应时间戳，格式为yyyy-MM-dd HH:mm:ss
+	ErrCode           string `json:"errCode" bson:"errCode"`                     // 错误码,SUCCESS表示成功
+	BillStatus        string `json:"billStatus" bson:"billStatus"`               // 订单状态
+	CardAttr          string `json:"cardAttr" bson:"cardAttr"`                   // 银行卡属性
+	BillNo            string `json:"billNo" bson:"billNo"`                       // 订单号
+	BillQRCode        string `json:"billQRCode" bson:"billQRCode"`               // 订单二维码，用于扫码支付，前端用些url生成一个二维码
 }
 
 // QrPayRefundReq 二维码支付退款请求参数
 type QrPayRefundReq struct {
-	RequestTimestamp string `json:"requestTimestamp"` // 请求时间戳，格式为yyyy-MM-dd HH:mm:ss，自动填充为当前时间
-	MsgId            string `json:"msgId"`            // 消息ID
-	Mid              string `json:"mid"`              // 商户ID
-	Tid              string `json:"tid"`              // 终端ID
-	InstMid          string `json:"instMid"`          // 机构ID,自动填充为配置文件中的机构ID
-	RefundAmount     int64  `json:"refundAmount"`     // 退款金额，单位分
-	BillNo           string `json:"billNo"`           // 订单号
-	BillDate         string `json:"billDate"`         // 订单日期，格式为yyyy-MM-dd
+	RequestTimestamp string `json:"requestTimestamp" bson:"requestTimestamp"` // 请求时间戳，格式为yyyy-MM-dd HH:mm:ss，自动填充为当前时间
+	MsgId            string `json:"msgId" bson:"msgId"`                       // 消息ID
+	Mid              string `json:"mid" bson:"mid"`                           // 商户ID
+	Tid              string `json:"tid" bson:"tid"`                           // 终端ID,自动填充为配置文件中的终端ID
+	InstMid          string `json:"instMid" bson:"instMid"`                   // 机构ID,自动填充为配置文件中的机构ID
+	RefundAmount     int64  `json:"refundAmount" bson:"refundAmount"`         // 退款金额，单位分
+	BillNo           string `json:"billNo" bson:"billNo"`                     // 订单号
+	BillDate         string `json:"billDate" bson:"billDate"`                 // 订单日期，格式为yyyy-MM-dd
 }
 
 // QrPayRefundResp 二维码支付退款响应参数
 type QrPayRefundResp struct {
-	Mid                 string `json:"mid"`                 // 商户ID
-	MsgId               string `json:"msgId"`               // 消息ID
-	RefundStatus        string `json:"refundStatus"`        // 退款状态
-	BillDate            string `json:"billDate"`            // 订单日期，格式为yyyy-MM-dd
-	SettleDate          string `json:"settleDate"`          // 结算日期，格式为yyyy-MM-dd
-	Tid                 string `json:"tid"`                 // 终端ID
-	InstMid             string `json:"instMid"`             // 机构ID,自动填充为配置文件中的机构ID
-	RefundOrderId       string `json:"refundOrderId"`       // 退款订单ID
-	RefundTargetOrderId string `json:"refundTargetOrderId"` // 退款目标订单ID
-	RefundInvoiceAmount int    `json:"refundInvoiceAmount"` // 退款发票金额，单位分
-	ResponseTimestamp   string `json:"responseTimestamp"`   // 响应时间戳，格式为yyyy-MM-dd HH:mm:ss
-	ErrCode             string `json:"errCode"`             // 错误码,SUCCESS表示成功
-	BillStatus          string `json:"billStatus"`          // 订单状态
-	CardAttr            string `json:"cardAttr"`            // 银行卡属性
-	RefundPayTime       string `json:"refundPayTime"`       // 退款支付时间，格式为yyyy-MM-dd HH:mm:ss
-	BillNo              string `json:"billNo"`              // 订单号
-	BillQRCode          string `json:"billQRCode"`          // 订单二维码，用于扫码支付，前端用些url生成一个二维码
-	MerOrderId          string `json:"merOrderId"`          // 商户订单ID
-	RefundAmount        int    `json:"refundAmount"`        // 退款金额，单位分
-	TargetSys           string `json:"targetSys"`           // 目标系统，微信、支付宝、云闪付
+	Mid                 string `json:"mid" bson:"mid"`                                 // 商户ID
+	MsgId               string `json:"msgId" bson:"msgId"`                             // 消息ID
+	RefundStatus        string `json:"refundStatus" bson:"refundStatus"`               // 退款状态
+	BillDate            string `json:"billDate" bson:"billDate"`                       // 订单日期，格式为yyyy-MM-dd
+	SettleDate          string `json:"settleDate" bson:"settleDate"`                   // 结算日期，格式为yyyy-MM-dd
+	Tid                 string `json:"tid" bson:"tid"`                                 // 终端ID,自动填充为配置文件中的终端ID
+	InstMid             string `json:"instMid" bson:"instMid"`                         // 机构ID,自动填充为配置文件中的机构ID
+	RefundOrderId       string `json:"refundOrderId" bson:"refundOrderId"`             // 退款订单ID
+	RefundTargetOrderId string `json:"refundTargetOrderId" bson:"refundTargetOrderId"` // 退款目标订单ID
+	RefundInvoiceAmount int    `json:"refundInvoiceAmount" bson:"refundInvoiceAmount"` // 退款发票金额，单位分
+	ResponseTimestamp   string `json:"responseTimestamp" bson:"responseTimestamp"`     // 响应时间戳，格式为yyyy-MM-dd HH:mm:ss
+	ErrCode             string `json:"errCode" bson:"errCode"`                         // 错误码,SUCCESS表示成功
+	BillStatus          string `json:"billStatus" bson:"billStatus"`                   // 订单状态
+	CardAttr            string `json:"cardAttr" bson:"cardAttr"`                       // 银行卡属性
+	RefundPayTime       string `json:"refundPayTime" bson:"refundPayTime"`             // 退款支付时间，格式为yyyy-MM-dd HH:mm:ss
+	BillNo              string `json:"billNo" bson:"billNo"`                           // 订单号
+	BillQRCode          string `json:"billQRCode" bson:"billQRCode"`                   // 订单二维码，用于扫码支付，前端用些url生成一个二维码
+	MerOrderId          string `json:"merOrderId" bson:"merOrderId"`                   // 商户订单ID
+	RefundAmount        int    `json:"refundAmount" bson:"refundAmount"`               // 退款金额，单位分
+	TargetSys           string `json:"targetSys" bson:"targetSys"`                     // 目标系统，微信、支付宝、云闪付
 }
 
 type QrPayNotifyReq struct {
-	Mid            string `json:"mid"  form:"mid"`                      // 商户ID
-	Tid            string `json:"tid"  form:"tid"`                      // 终端ID
-	InstMid        string `json:"instMid" form:"instMid"`               // 机构ID,自动填充为配置文件中的机构ID
-	BillNo         string `json:"billNo" form:"billNo"`                 // 订单号
-	BillQRCode     string `json:"billQRCode" form:"billQRcode"`         // 订单二维码，用于扫码支付，前端用些url生成一个二维码
-	BillDate       string `json:"billDate" form:"billDate"`             // 订单日期，格式为yyyy-MM-dd
-	CreateTime     string `json:"createTime" form:"createTime"`         // 创建时间，格式为yyyy-MM-dd HH:mm:ss
-	BillStatus     string `json:"billStatus" form:"billStatus"`         // 订单状态
-	BillDesc       string `json:"billDesc" form:"billDesc"`             // 订单描述
-	TotalAmount    int64  `json:"totalAmount" form:"totalAmount"`       // 订单金额，单位分
-	MemberId       string `json:"memberId" form:"memberId"`             // 商户会员ID
-	MerName        string `json:"merName" form:"merName"`               // 商户名称
-	Memo           string `json:"memo" form:"memo"`                     // 备注
-	NotifyId       string `json:"notifyId" form:"notifyId"`             // 通知ID
-	SecureStatus   string `json:"secureStatus" form:"secureStatus"`     // 担保状态
-	CompleteAmount int64  `json:"completeAmount" form:"completeAmount"` // 担保完成金额，单位分
-	BillPayment    string `json:"billPayment" form:"billPayment"`       // 账单支付状态,JSON串
-	Sign           string `json:"sign" form:"sign"`                     // 签名
-	BankInfo       string `json:"bankInfo" form:"bankInfo"`             // 银行卡信息
-	BankCardNo     string `json:"bankCardNo" form:"bankCardNo"`         // 银行卡号
-	SeqId          string `json:"seqId" form:"seqId"`                   // 序列号
-	ReceiptAmount  int64  `json:"receiptAmount" form:"receiptAmount"`   // 实收金额，单位分
-	ExtraBuyerInfo string `json:"extraBuyerInfo" form:"extraBuyerInfo"` // 额外买家信息
-	RefundAmount   int64  `json:"refundAmount" form:"refundAmount"`     // 退款金额，单位分
-	RefundDesc     string `json:"refundDesc" form:"refundDesc"`         // 退款描述
-	MchntUuid      string `json:"mchntUuId" form:"mchntUuId"`           // 商户统一商号
-	SubInst        string `json:"subInst" form:"subInst"`               // 子机构ID
-	SrcReserved    string `json:"srcReserved" form:"srcReserved"`       // 备注
-	QrCodeType     string `json:"qrCodeType" form:"qrCodeType"`         // 二维码类型
+	Mid            string `json:"mid"  form:"mid" bson:"mid"`                                 // 商户ID
+	Tid            string `json:"tid"  form:"tid" bson:"tid"`                                 // 终端ID
+	InstMid        string `json:"instMid" form:"instMid" bson:"instMid"`                      // 机构ID,自动填充为配置文件中的机构ID
+	BillNo         string `json:"billNo" form:"billNo" bson:"billNo"`                         // 订单号
+	BillQRCode     string `json:"billQRCode" form:"billQRcode" bson:"billQRCode"`             // 订单二维码，用于扫码支付，前端用些url生成一个二维码
+	BillDate       string `json:"billDate" form:"billDate" bson:"billDate"`                   // 订单日期，格式为yyyy-MM-dd
+	CreateTime     string `json:"createTime" form:"createTime" bson:"createTime"`             // 创建时间，格式为yyyy-MM-dd HH:mm:ss
+	BillStatus     string `json:"billStatus" form:"billStatus" bson:"billStatus"`             // 订单状态
+	BillDesc       string `json:"billDesc" form:"billDesc" bson:"billDesc"`                   // 订单描述
+	TotalAmount    int64  `json:"totalAmount" form:"totalAmount" bson:"totalAmount"`          // 订单金额，单位分
+	MemberId       string `json:"memberId" form:"memberId" bson:"memberId"`                   // 商户会员ID
+	MerName        string `json:"merName" form:"merName" bson:"merName"`                      // 商户名称
+	Memo           string `json:"memo" form:"memo" bson:"memo"`                               // 备注
+	NotifyId       string `json:"notifyId" form:"notifyId" bson:"notifyId"`                   // 通知ID
+	SecureStatus   string `json:"secureStatus" form:"secureStatus" bson:"secureStatus"`       // 担保状态
+	CompleteAmount int64  `json:"completeAmount" form:"completeAmount" bson:"completeAmount"` // 担保完成金额，单位分
+	BillPayment    string `json:"billPayment" form:"billPayment" bson:"billPayment"`          // 账单支付状态,JSON串
+	Sign           string `json:"sign" form:"sign" bson:"sign"`                               // 签名
+	BankInfo       string `json:"bankInfo" form:"bankInfo" bson:"bankInfo"`                   // 银行卡信息
+	BankCardNo     string `json:"bankCardNo" form:"bankCardNo" bson:"bankCardNo"`             // 银行卡号
+	SeqId          string `json:"seqId" form:"seqId" bson:"seqId"`                            // 序列号
+	ReceiptAmount  int64  `json:"receiptAmount" form:"receiptAmount" bson:"receiptAmount"`    // 实收金额，单位分
+	ExtraBuyerInfo string `json:"extraBuyerInfo" form:"extraBuyerInfo" bson:"extraBuyerInfo"` // 额外买家信息
+	RefundAmount   int64  `json:"refundAmount" form:"refundAmount" bson:"refundAmount"`       // 退款金额，单位分
+	RefundDesc     string `json:"refundDesc" form:"refundDesc" bson:"refundDesc"`             // 退款描述
+	MchntUuid      string `json:"mchntUuId" form:"mchntUuId" bson:"mchntUuid"`                // 商户统一商号
+	SubInst        string `json:"subInst" form:"subInst" bson:"subInst"`                      // 子机构ID
+	SrcReserved    string `json:"srcReserved" form:"srcReserved" bson:"srcReserved"`          // 备注
+	QrCodeType     string `json:"qrCodeType" form:"qrCodeType" bson:"qrCodeType"`             // 二维码类型
 }
 
 type QrPayNotifyBillPayment struct {
