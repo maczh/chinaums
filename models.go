@@ -57,6 +57,7 @@ type BSCPayResp struct {
 	ThirdPartyDiscountInstruction string `json:"thirdPartyDiscountInstruction" bson:"thirdPartyDiscountInstruction"` //营销联盟优惠说明
 	ThirdPartyName                string `json:"thirdPartyName" bson:"thirdPartyName"`                               //第三方名称(微信、支付宝、云闪付)
 	UserId                        string `json:"userId" bson:"userId"`                                               //第三方用户ID
+	BankCardNo                    string `json:"bankCardNo" bson:"bankCardNo"`                                       //银行卡号
 	ThirdPartyBuyerId             string `json:"thirdPartyBuyerId" bson:"thirdPartyBuyerId"`                         //第三方买家ID
 	ThirdPartyOrderId             string `json:"thirdPartyOrderId" bson:"thirdPartyOrderId"`                         //第三方订单ID
 	ThirdPartyPayInformation      string `json:"thirdPartyPayInformation" bson:"thirdPartyPayInformation"`           //第三方支付信息
