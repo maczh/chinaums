@@ -557,3 +557,74 @@ type QrPayNotifyBillPayment struct {
 	Status        string `json:"status"`        // 状态
 	TargetSys     string `json:"targetSys"`     // 支付应用
 }
+
+// 异步核销模型BusinessUnifyMulti(Bum)
+// 公共请求头
+type BumReqHeader struct {
+	TransCode  string `json:"transCode,omitempty"`  // 交易码
+	VerNo      string `json:"verNo,omitempty"`      // 版本
+	SrcReqDate string `json:"srcReqDate,omitempty"` // YYYYMMDD
+	SrcReqTime string `json:"srcReqTime,omitempty"` // HHmmss
+	SrcReqId   string `json:"srcReqId,omitempty"`   // 36 位 UUID
+	ChannelId  string `json:"channelId,omitempty"`  // 043
+	GroupId    string `json:"groupId,omitempty"`    // 6 位集团号
+	Signature  string `json:"signature,omitempty"`  // RSA 签名
+}
+
+// 公共响应头
+type BumRespHeader struct {
+	TransCode  string `json:"transCode"`
+	VerNo      string `json:"verNo"`
+	SrcReqDate string `json:"srcReqDate"`
+	SrcReqTime string `json:"srcReqTime"`
+	SrcReqId   string `json:"srcReqId"`
+	RespCode   string `json:"respCode"`
+	RespMsg    string `json:"respMsg"`
+	Signature  string `json:"signature"`
+}
+
+// 202017 充值暂挂余额查询
+type BumPendingBalanceReq struct {
+	BumReqHeader
+	MerNo string `json:"merNo,omitempty"` // 14
+}
+type BumPendingBalanceResp struct {
+	BumRespHeader
+	MerNo           string `json:"merNo"`
+	MerName         string `json:"merName"`
+	GroupId         string `json:"groupId"`
+	PendingAmt      string `json:"pendingAmt"` // 分
+	InTransitAmt    string `json:"inTransitAmt"`
+	VerifiedAmt     string `json:"verifiedAmt"`
+	OnlineRefundAmt string `json:"onlineRefundAmt"`
+	OnlineManRefAmt string `json:"onlineManRefundAmt"`
+	OnlineSetRefAmt string `json:"onlineSettleRefundAmt"`
+	Reserve1        string `json:"reserve1,omitempty"`
+	Reserve2        string `json:"reserve2,omitempty"`
+	Reserve3        string `json:"reserve3,omitempty"`
+}
+
+// BumOrderQueryReq 异步支付充值订单查询请求(202018)
+type BumOrderQueryReq struct {
+	BumReqHeader
+	MerNo      string `json:"merNo,omitempty"`      // 企业用户号(14位)
+	TransDate  string `json:"transDate,omitempty"`  // 交易日期(YYYYMMDD)
+	QueryItem  string `json:"queryItem,omitempty"`  // 查询项(A-商户订单号,B-银商流水号)
+	QueryValue string `json:"queryValue,omitempty"` // 查询值
+}
+
+// BumTransferReq 按金额划付请求(202002)
+type BumTransferReq struct {
+	BumReqHeader
+	MerNo  string `json:"merNo,omitempty"`  // 企业用户号(14位)
+	PayAmt string `json:"payAmt,omitempty"` // 划付金额(单位:分,字符串类型)
+}
+
+// BumAllocationReq 按金额分账请求(202004)
+type BumAllocationReq struct {
+	MerNo   string `json:"merNo,omitempty"`   // 企业用户号(14位)
+	PayType string `json:"payType,omitempty"` // 分账类型(0-指定金额分账)
+	CardNo  string `json:"cardNo,omitempty"`  // 加密卡号(SHA-256哈希)
+	Ps      string `json:"ps,omitempty"`      // 分账附言(最长30字符)
+	PayAmt  string `json:"payAmt,omitempty"`  // 分账金额(单位:分,字符串类型)
+}

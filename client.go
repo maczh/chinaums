@@ -6,6 +6,7 @@ type client struct {
 	BscPay   *bscPay
 	WxAppPay *wxAppPay
 	QRPay    *qrPay
+	Bum      *businessUnifyMulti
 }
 
 var (
@@ -13,6 +14,7 @@ var (
 		BscPay:   &bscPay{},
 		WxAppPay: &wxAppPay{},
 		QRPay:    &qrPay{},
+		Bum:      &businessUnifyMulti{},
 	}
 
 	log = logrus.New()

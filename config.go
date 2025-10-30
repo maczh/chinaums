@@ -24,11 +24,6 @@ var config = sdkConfig{
 	TerminalIdCB: "TVMH1T1D",
 }
 
-type gis struct {
-	Longitude string `json:"longitude"` //门店经度
-	Latitude  string `json:"latitude"`  //门店纬度
-}
-
 const (
 	URI_BC_PAY              = "/v4/poslink/transaction/pay"
 	URI_BC_VOID             = "/v2/poslink/transaction/voidpayment"
@@ -43,19 +38,19 @@ const (
 	URI_QR_PAY              = "/v1/netpay/bills/get-qrcode"
 	URI_QR_QUERY            = "/v1/netpay/bills/query"
 	URI_QR_REFUND           = "/v1/netpay/bills/refund"
-)
 
-var StoreGISMap = map[string]gis{
-	"fe79430f-d455-4bd7-999a-b0cdf4315f17": {
-		Longitude: "+119.29129",
-		Latitude:  "+26.063591",
-	},
-	"ae48ee12-f901-4cbb-ba0d-4c7497a26c23": {
-		Longitude: "+119.29932",
-		Latitude:  "+26.087781",
-	},
-	"0c0a703c-1285-4d6f-bc31-0ff93bb11ca3": {
-		Longitude: "+119.29181",
-		Latitude:  "+26.062159",
-	},
-}
+	// 交易码
+	TRANS_CODE_BUM_BALANCE_QUERY      = "202017"
+	TRANS_CODE_BUM_ORDER_QUERY        = "202018"
+	TRANS_CODE_BUM_TRANSFER           = "202002"
+	TRANS_CODE_BUM_ALLOCATION         = "202004"
+	TRANS_CODE_MERCHANT_BALANCE_QUERY = "202006"
+	TRANS_CODE_TRADE_DETAIL_QUERY     = "202007"
+	TRANS_CODE_OPERATE_QUERY          = "202008"
+
+	BUM_VER        = "100"
+	BUM_CHANNEL_ID = "043"
+	BUM_GROUP_ID   = "123456"
+	BUM_HOST       = "https://mobl-test.chinaums.com"
+	URI_BUM        = "/channel/Business/UnifyMulti/"
+)
