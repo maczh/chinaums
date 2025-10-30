@@ -605,12 +605,33 @@ type BumPendingBalanceResp struct {
 }
 
 // BumOrderQueryReq 异步支付充值订单查询请求(202018)
-type BumOrderQueryReq struct {
+type BumRechargeOrderQueryReq struct {
 	BumReqHeader
 	MerNo      string `json:"merNo,omitempty"`      // 企业用户号(14位)
 	TransDate  string `json:"transDate,omitempty"`  // 交易日期(YYYYMMDD)
 	QueryItem  string `json:"queryItem,omitempty"`  // 查询项(A-商户订单号,B-银商流水号)
 	QueryValue string `json:"queryValue,omitempty"` // 查询值
+}
+
+type QueryRechargeOrderResp struct {
+	BumRespHeader
+	MerNo        string `json:"merNo"`
+	StlDate      string `json:"stlDate"`
+	OrderNo      string `json:"orderNo"`
+	MerFee       string `json:"merFee"`
+	SettleStatus string `json:"settleStatus"` // "00","01","Special"
+	TxnAmt       string `json:"txnAmt"`
+	PendingAmt   string `json:"pendingAmt"`
+	VerifiedAmt  string `json:"verifiedAmt"`
+	InTransitAmt string `json:"inTransitAmt"`
+	PndFlg       string `json:"pndFlg"` // 1/2/3
+	TransDt      string `json:"transDt"`
+	CardType     string `json:"cardType"`
+	Pan          string `json:"pan"`
+	CardIssuer   string `json:"cardIssuer"`
+	OriRefNo     string `json:"oriRefNo,omitempty"`
+	OriTransDt   string `json:"oriTransDt,omitempty"`
+	OriTxnAmt    string `json:"oriTxnAmt,omitempty"`
 }
 
 // BumTransferReq 按金额划付请求(202002)
@@ -622,9 +643,80 @@ type BumTransferReq struct {
 
 // BumAllocationReq 按金额分账请求(202004)
 type BumAllocationReq struct {
+	BumReqHeader
 	MerNo   string `json:"merNo,omitempty"`   // 企业用户号(14位)
 	PayType string `json:"payType,omitempty"` // 分账类型(0-指定金额分账)
 	CardNo  string `json:"cardNo,omitempty"`  // 加密卡号(SHA-256哈希)
 	Ps      string `json:"ps,omitempty"`      // 分账附言(最长30字符)
 	PayAmt  string `json:"payAmt,omitempty"`  // 分账金额(单位:分,字符串类型)
+}
+
+// ====== 202006: 商户信息查询 ======
+type QueryMerchantInfoReq struct {
+	BumReqHeader
+	MerNo string `json:"merNo"`
+}
+
+type QueryMerchantInfoResp struct {
+	BumRespHeader
+	MerNo     string `json:"merNo"`
+	MerName   string `json:"merName"`
+	GroupId   string `json:"groupId"`
+	TopMer    string `json:"topMer"`
+	MerLevel  string `json:"merLevel"`
+	CanPayAmt string `json:"canPayAmt"`
+}
+
+// QueryTxnDetailReq 202007
+type QueryTxnDetailReq struct {
+	BumReqHeader
+	MerNo      string `json:"merNo"`
+	TransDate  string `json:"transDate"` // yyyyMMdd
+	QueryItem  string `json:"queryItem"` // merchant order no
+	QueryValue string `json:"queryValue"`
+}
+
+type QueryTxnDetailResp struct {
+	BumRespHeader
+	MerNo        string `json:"merNo"`
+	StlDate      string `json:"stlDate"`
+	MerOrderNo   string `json:"merOrderNo"`
+	CanPayAmt    string `json:"canPayAmt"`
+	SettleStatus string `json:"settleStatus"` // "00","01","Special"
+	MerFee       string `json:"merFee"`
+	TxnAmt       string `json:"txnAmt"`
+	PaidAmt      string `json:"paidAmt"`
+	AllottedAmt  string `json:"allottedAmt"`
+	TransDt      string `json:"transDt"`
+	CardType     string `json:"cardType"`
+	Pan          string `json:"pan"`
+	IssInstId    string `json:"issInstId"`
+	OriRefNo     string `json:"oriRefNo,omitempty"`
+	OriTransDt   string `json:"oriTransDt,omitempty"`
+	OriTxnAmt    string `json:"oriTxnAmt,omitempty"`
+}
+
+// ====== 202008: 操作记录查询 ======
+
+type QueryOperationLogReq struct {
+	BumReqHeader
+	MerNo        string `json:"merNo"`
+	ReqDate      string `json:"reqDate"`      // yyyyMMdd
+	ReqJournalNo string `json:"reqJournalNo"` // srcReqId
+}
+
+type OperationOrder struct {
+	OrderNo   string `json:"orderNo"`
+	OrderType string `json:"orderType"` // 核销/分账
+	Status    string `json:"status"`    // 1/2/3/5/6
+	OrderAmt  string `json:"orderAmt"`
+}
+
+type QueryOperationLogResp struct {
+	BumRespHeader
+	MerNo        string           `json:"merNo"`
+	ReqDate      string           `json:"reqDate"`
+	ReqJournalNo string           `json:"reqJournalNo"`
+	OrderSet     []OperationOrder `json:"orderSet"`
+	Status       string           `json:"status"` // overall 0/1
 }
