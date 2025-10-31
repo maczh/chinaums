@@ -5,6 +5,7 @@ go 1.24.3
 require (
 	github.com/levigross/grequests v0.0.0-20250606031859-3f3c12e4e704
 	github.com/sirupsen/logrus v1.9.3
+	golang.org/x/crypto v0.16.0
 )
 
 require (

@@ -10,6 +10,8 @@ type sdkConfig struct {
 	TerminalId   string `json:"terminalId"`
 	MerchantIdCB string `json:"merchantIdCB"`
 	TerminalIdCB string `json:"terminalIdCB"`
+	BumHost      string `json:"bumHost"`
+	BumGroupId   string `json:"bumGroupId"`
 }
 
 var config = sdkConfig{
@@ -22,6 +24,8 @@ var config = sdkConfig{
 	TerminalId:   "C5G7YL4R",
 	MerchantIdCB: "898350100003516",
 	TerminalIdCB: "TVMH1T1D",
+	BumHost:      "https://mobl-test.chinaums.com",
+	BumGroupId:   "000000",
 }
 
 const (
@@ -42,15 +46,17 @@ const (
 	// 交易码
 	TRANS_CODE_BUM_BALANCE_QUERY      = "202017"
 	TRANS_CODE_BUM_ORDER_QUERY        = "202018"
+	TRANS_CODE_BUM_ORDER_TRANSFER     = "202001"
 	TRANS_CODE_BUM_TRANSFER           = "202002"
+	TRANS_CODE_BUM_ORDER_ALLOCATION   = "202003"
 	TRANS_CODE_BUM_ALLOCATION         = "202004"
-	TRANS_CODE_MERCHANT_BALANCE_QUERY = "202006"
-	TRANS_CODE_TRADE_DETAIL_QUERY     = "202007"
-	TRANS_CODE_OPERATE_QUERY          = "202008"
+	TRANS_CODE_BUM_MERCHANT_QUERY     = "202006"
+	TRANS_CODE_BUM_TRADE_DETAIL_QUERY = "202007"
+	TRANS_CODE_BUM_OPERATE_QUERY      = "202008"
 
 	BUM_VER        = "100"
 	BUM_CHANNEL_ID = "043"
-	BUM_GROUP_ID   = "123456"
-	BUM_HOST       = "https://mobl-test.chinaums.com"
-	URI_BUM        = "/channel/Business/UnifyMulti/"
+	//BUM_GROUP_ID   = "123456"
+	//BUM_HOST       = "https://mobl-test.chinaums.com"
+	URI_BUM = "/channel/Business/UnifyMulti/"
 )

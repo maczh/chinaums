@@ -157,3 +157,57 @@ func TestQRPayRefund(t *testing.T) {
 	}
 	t.Log("二维码支付退款结果:", ToJSONPretty(resp))
 }
+
+func TestBumSign(t *testing.T) {
+	h := newBumReqHeader(TRANS_CODE_BUM_ORDER_TRANSFER)
+	req := BumTransferReq{
+		BumReqHeader: h,
+		MerNo:        "123123123",
+		PayAmt:       "500000",
+	}
+	s, err := BumSign(req, "D:\\Work\\go\\src\\github.com\\maczh\\chinaums\\key\\rsa_private_dev.pfx", "123456")
+	if err != nil {
+		t.Error(err.Error())
+	}
+	t.Logf("签名结果: %s", s)
+}
+
+func TestBumBalanceQuery(t *testing.T) {
+	Client.Bum.PrivateKeyFile = "D:\\Work\\go\\src\\github.com\\maczh\\chinaums\\key\\rsa_private_dev.pfx"
+	Client.Bum.PrivateKeyPwd = "123456"
+	resp, err := Client.Bum.BalanceQuery(BumPendingBalanceReq{
+		MerNo: "10001000000089",
+	})
+	if err != nil {
+		t.Errorf("查询错误: %s", err.Error())
+	} else {
+		t.Log(ToJSONPretty(resp))
+	}
+}
+
+func TestBumMerchantQuery(t *testing.T) {
+	Client.Bum.PrivateKeyFile = "D:\\Work\\go\\src\\github.com\\maczh\\chinaums\\key\\rsa_private_dev.pfx"
+	Client.Bum.PrivateKeyPwd = "123456"
+	resp, err := Client.Bum.MerchantQuery(BumQueryMerchantReq{
+		MerNo: "10001000000089",
+	})
+	if err != nil {
+		t.Errorf("查询错误: %s", err.Error())
+	} else {
+		t.Log(ToJSONPretty(resp))
+	}
+}
+
+func TestBumTransfer(t *testing.T) {
+	Client.Bum.PrivateKeyFile = "D:\\Work\\go\\src\\github.com\\maczh\\chinaums\\key\\rsa_private_dev.pfx"
+	Client.Bum.PrivateKeyPwd = "123456"
+	resp, err := Client.Bum.Transfer(&BumTransferReq{
+		MerNo:  "10001000000089",
+		PayAmt: "10",
+	})
+	if err != nil {
+		t.Errorf("划付错误: %s", err.Error())
+	} else {
+		t.Log(ToJSONPretty(resp))
+	}
+}

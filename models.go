@@ -634,11 +634,30 @@ type QueryRechargeOrderResp struct {
 	OriTxnAmt    string `json:"oriTxnAmt,omitempty"`
 }
 
+// BumOrderTransferReq 按订单金额划付请求(202001)
+type BumOrderTransferReq struct {
+	BumReqHeader
+	MerNo      string `json:"merNo,omitempty"`      // 企业用户号(14位)
+	MerOrderNo string `json:"merOrderNo,omitempty"` //商户充值订单号
+	PayAmt     string `json:"payAmt,omitempty"`     // 划付金额(单位:分,字符串类型)
+}
+
 // BumTransferReq 按金额划付请求(202002)
 type BumTransferReq struct {
 	BumReqHeader
 	MerNo  string `json:"merNo,omitempty"`  // 企业用户号(14位)
 	PayAmt string `json:"payAmt,omitempty"` // 划付金额(单位:分,字符串类型)
+}
+
+// BumOrderAllocationReq 按订单金额分账请求(202003)
+type BumOrderAllocationReq struct {
+	BumReqHeader
+	MerNo      string `json:"merNo,omitempty"`      // 企业用户号(14位)
+	MerOrderNo string `json:"merOrderNo,omitempty"` //商户充值订单号
+	PayType    string `json:"payType,omitempty"`    // 分账类型(0-指定金额分账)
+	CardNo     string `json:"cardNo,omitempty"`     // 加密卡号(SHA-256哈希)
+	Ps         string `json:"ps,omitempty"`         // 分账附言(最长30字符)
+	PayAmt     string `json:"payAmt,omitempty"`     // 分账金额(单位:分,字符串类型)
 }
 
 // BumAllocationReq 按金额分账请求(202004)
@@ -719,4 +738,19 @@ type QueryOperationLogResp struct {
 	ReqJournalNo string           `json:"reqJournalNo"`
 	OrderSet     []OperationOrder `json:"orderSet"`
 	Status       string           `json:"status"` // overall 0/1
+}
+
+type BumQueryMerchantReq struct {
+	BumReqHeader
+	MerNo string `json:"merNo,omitempty"` // 14
+}
+
+type BumQueryMerchantResp struct {
+	BumRespHeader
+	CanPayAmt string `json:"canPayAmt"`
+	GroupId   string `json:"groupId"`
+	MerLevel  string `json:"merLevel"`
+	MerName   string `json:"merName"`
+	MerNo     string `json:"merNo"`
+	TopMer    string `json:"topMer"`
 }

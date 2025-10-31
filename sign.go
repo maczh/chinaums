@@ -17,6 +17,8 @@ import (
 	"sort"
 	"strings"
 	"time"
+
+	"golang.org/x/crypto/pkcs12"
 )
 
 // 计算HMAC-SHA256
@@ -90,24 +92,59 @@ func getOpenBodySig(appId, appKey, body string) (string, error) {
 }
 
 // 私钥签名
-func BumSign(data any, rsaPrivateKeyFile string) (string, error) {
-	privateKeyPEM, err := os.ReadFile(rsaPrivateKeyFile)
+func BumSign(data any, rsaPrivateKeyFile, privateKeyPwd string) (string, error) {
+	pfxData, err := os.ReadFile(rsaPrivateKeyFile)
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("read private key file error: %w", err)
 	}
-	block, _ := pem.Decode(privateKeyPEM)
-	if block == nil || block.Type != "RSA PRIVATE KEY" {
-		return "", errors.New("无效的私钥格式")
-	}
-	pri, err := x509.ParsePKCS1PrivateKey(block.Bytes)
+
+	// 首先尝试直接解析
+	privateKey, _, err := pkcs12.Decode(pfxData, privateKeyPwd)
+	var priKey *rsa.PrivateKey
 	if err != nil {
-		return "", err
+		// 如果直接解析失败，尝试解析所有证书
+		blocks, err := pkcs12.ToPEM(pfxData, privateKeyPwd)
+		if err != nil {
+			return "", fmt.Errorf("decode PKCS12 file error: %w", err)
+		}
+
+		// 查找私钥
+		for _, block := range blocks {
+			if block.Type == "PRIVATE KEY" || block.Type == "RSA PRIVATE KEY" {
+				privateKey, err = x509.ParsePKCS1PrivateKey(block.Bytes)
+				if err == nil {
+					priKey = privateKey.(*rsa.PrivateKey)
+					break
+				}
+				// 尝试 PKCS8 格式
+				pk, err := x509.ParsePKCS8PrivateKey(block.Bytes)
+				if err == nil {
+					var ok bool
+					priKey, ok = pk.(*rsa.PrivateKey)
+					if ok {
+						break
+					}
+				}
+			}
+		}
+		if priKey == nil {
+			return "", fmt.Errorf("no valid RSA private key found in PKCS12 file")
+		}
+	} else {
+		var ok bool
+		priKey, ok = privateKey.(*rsa.PrivateKey)
+		if !ok {
+			return "", errors.New("not rsa private key")
+		}
 	}
+
 	m := struct2Map(data)
 	str := mapToKV(m)
+	fmt.Printf("签名原始串: %s\n", str)
 	hash := sha256.Sum256([]byte(str))
-	sig, err := rsa.SignPKCS1v15(rand.Reader, pri, crypto.SHA256, hash[:])
+	sig, err := rsa.SignPKCS1v15(rand.Reader, priKey, crypto.SHA256, hash[:])
 	if err != nil {
+		log.Errorf("rsa.SignPKCS1v15错误: %s", err.Error())
 		return "", err
 	}
 	return hex.EncodeToString(sig), nil
