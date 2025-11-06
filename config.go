@@ -34,7 +34,7 @@ const (
 	URI_BC_REFUND           = "/v2/poslink/transaction/refund"
 	URI_BC_QUERY            = "/v2/poslink/transaction/query"
 	URI_BC_REFUND_QUERY     = "/v2/poslink/transaction/query-refund"
-	URI_WX_APP_PAY          = "/v1/netpay/wx/unified-order"
+	URI_WX_APP_PAY          = "/v1/netpay/wx/mini-pre-order"
 	URI_WX_APP_QUERY        = "/v1/netpay/order-query"
 	URI_WX_APP_REFUND       = "/v1/netpay/refund"
 	URI_WX_APP_REFUND_QUERY = "/v1/netpay/refund-query"
