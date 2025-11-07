@@ -1,5 +1,7 @@
 package chinaums
 
+import "time"
+
 type BSCPayReq struct {
 	MerchantCode            string       `json:"merchantCode" bson:"merchantCode"`                       //商户ID，必填
 	TerminalCode            string       `json:"terminalCode" bson:"terminalCode"`                       //终端ID，必填
@@ -297,11 +299,15 @@ type WxAppQueryResp struct {
 	MerOrderId        string `json:"merOrderId"`
 	Status            string `json:"status"`
 	TargetSys         string `json:"targetSys"`
+	TargetStatus      string `json:"targetStatus"`
 	MerName           string `json:"merName"`
 	Mid               string `json:"mid"`
 	Tid               string `json:"tid"`
 	InstMid           string `json:"instMid"`
 	ResponseTimestamp string `json:"responseTimestamp"`
+	BankCardNo        string `json:"bankCardNo"`
+	BankInfo          string `json:"bankInfo"`
+	SubBuyerId        string `json:"subBuyerId"`
 	ErrCode           string `json:"errCode"`
 }
 
@@ -317,7 +323,6 @@ type WxAppRefundReq struct {
 	RefundOrderId    string     `json:"refundOrderId"`
 	MerOrderId       string     `json:"merOrderId"`
 	TargetOrderId    string     `json:"targetOrderId"`
-	BillDate         string     `json:"billDate"`
 	RefundDesc       string     `json:"refundDesc"`
 }
 
@@ -334,6 +339,9 @@ type WxAppRefundResp struct {
 	Status              string `json:"status"`
 	MerOrderId          string `json:"merOrderId"`
 	RefundAmount        int64  `json:"refundAmount"`
+	TotalAmount         int64  `json:"totalAmount"`
+	TargetStatus        string `json:"targetStatus"`
+	TargetSys           string `json:"targetSys"`
 }
 
 type WxAppRefundQueryReq struct {
@@ -391,6 +399,68 @@ type WxAppCloseResp struct {
 	TargetSys         string `json:"targetSys"`
 	TargetStatus      string `json:"targetStatus"`
 	TotalAmount       int64  `json:"totalAmount"`
+}
+
+// WxAppPayNotifyReq 微信小程序支付结果通知请求结构体
+// 对应文档“支付结果通知”报文格式（form表单参数）
+type WxAppPayNotifyReq struct {
+	// 必传字段
+	Mid            string `json:"mid" form:"mid" validate:"required"`                                                                                                                                // 商户号（字符串，必填）
+	Tid            string `json:"tid" form:"tid" validate:"required"`                                                                                                                                // 终端号（字符串，必填）
+	BuyerPayAmount int64  `json:"buyerPayAmount" form:"buyerPayAmount" validate:"required,min=1"`                                                                                                    // 实付金额（数字型，单位：分，必填）
+	TotalAmount    int64  `json:"totalAmount" form:"totalAmount" validate:"required,min=1"`                                                                                                          // 订单金额（数字型，单位：分，必填）
+	MerOrderId     string `json:"merOrderId" form:"merOrderId" validate:"required,len=6-32"`                                                                                                         // 商户订单号（字符串，长度6-32，必填）
+	PayTime        string `json:"payTime" form:"payTime" validate:"required,datetime=2006-01-02 15:04:05"`                                                                                           // 支付时间（字符串，格式：yyyy-MM-dd HH:mm:ss，必填）
+	SeqId          string `json:"seqId" form:"seqId" validate:"required"`                                                                                                                            // 系统交易流水号（字符串，必填）
+	SettleDate     string `json:"settleDate" form:"settleDate" validate:"required,datetime=2006-01-02"`                                                                                              // 结算日期（字符串，格式：yyyy-MM-dd，必填）
+	Status         string `json:"status" form:"status" validate:"required,oneof=NEW_ORDER UNKNOWN TRADE_CLOSED WAIT_BUYER_PAY TRADE_SUCCESS TRADE_REFUND"`                                           // 订单状态（字符串，必填，取值见文档2.3）
+	TargetOrderId  string `json:"targetOrderId" form:"targetOrderId" validate:"required"`                                                                                                            // 渠道订单号（字符串，必填）
+	TargetSys      string `json:"targetSys" form:"targetSys" validate:"required,oneof=Alipay1.0 Alipay2.0 WXPay YQB QMF UnionPay BaiDu JD SF COMM BestPay ACP NetPayBills NetPayGtwy QmfWebPay UAC"` // 支付渠道（字符串，必填，取值见文档2.5）
+	RandomKey      string `json:"randomKey" form:"randomKey" validate:"required"`                                                                                                                    // 随机key（字符串，参与签名，必填）
+	Sign           string `json:"sign" form:"sign" validate:"required"`                                                                                                                              // 签名（字符串，必填）
+
+	// 可选字段
+	InstMid                  string `json:"instMid" form:"instMid"`                                                                                          // 机构商户号（字符串，可选，默认MINIDEFAULT）
+	BankCardNo               string `json:"bankCardNo" form:"bankCardNo"`                                                                                    // 支付银行卡号（字符串，可选）
+	BillFunds                string `json:"billFunds" form:"billFunds"`                                                                                      // 资金渠道（字符串，可选，示例：“微信零钱:100|银行卡:200”）
+	BillFundsDesc            string `json:"billFundsDesc" form:"billFundsDesc"`                                                                              // 资金渠道说明（字符串，可选）
+	BuyerId                  string `json:"buyerId" form:"buyerId"`                                                                                          // 买家ID（字符串，可选，如微信openId、支付宝userId）
+	BuyerUsername            string `json:"buyerUsername" form:"buyerUsername"`                                                                              // 买家用户名（字符串，可选，可能脱敏）
+	CouponAmount             int64  `json:"couponAmount" form:"couponAmount"`                                                                                // 渠道优惠金额（数字型，单位：分，可选）
+	InvoiceAmount            int64  `json:"invoiceAmount" form:"invoiceAmount"`                                                                              // 开票金额（数字型，单位：分，可选）
+	ReceiptAmount            int64  `json:"receiptAmount" form:"receiptAmount"`                                                                              // 实收金额（数字型，单位：分，可选）
+	RefId                    string `json:"refId" form:"refId"`                                                                                              // 支付银行卡参考号（字符串，可选，银联体系交易用）
+	RefundAmount             int64  `json:"refundAmount" form:"refundAmount"`                                                                                // 退款金额（数字型，单位：分，仅退货交易可选）
+	RefundDesc               string `json:"refundDesc" form:"refundDesc"`                                                                                    // 退款说明（字符串，仅退货交易可选）
+	SubBuyerId               string `json:"subBuyerId" form:"subBuyerId"`                                                                                    // 买家子ID（字符串，可选，如微信subOpenId）
+	CouponMerchantContribute int64  `json:"couponMerchantContribute" form:"couponMerchantContribute"`                                                        // 商户出资优惠金额（数字型，单位：分，可选，仅微信支持）
+	CouponOtherContribute    int64  `json:"couponOtherContribute" form:"couponOtherContribute"`                                                              // 其他出资优惠金额（数字型，单位：分，可选，仅微信支持）
+	ActivityIds              string `json:"activityIds" form:"activityIds"`                                                                                  // 微信活动ID（字符串，可选，多个用逗号分隔）
+	RefundTargetOrderId      string `json:"refundTargetOrderId" form:"refundTargetOrderId"`                                                                  // 退货渠道订单号（字符串，可选）
+	RefundPayTime            string `json:"refundPayTime" form:"refundPayTime"`                                                                              // 退货时间（字符串，格式：yyyy-MM-dd HH:mm:ss，可选）
+	RefundSettleDate         string `json:"refundSettleDate" form:"refundSettleDate"`                                                                        // 退货结算日期（字符串，格式：yyyy-MM-dd，可选）
+	OrderDesc                string `json:"orderDesc" form:"orderDesc"`                                                                                      // 订单详情（字符串，可选，微信支付时长度≤128字节）
+	CreateTime               string `json:"createTime" form:"createTime"`                                                                                    // 订单创建时间（字符串，格式：yyyy-MM-dd HH:mm:ss，可选）
+	MchntUuid                string `json:"mchntUuid" form:"mchntUuid"`                                                                                      // 商户UUID（字符串，可选，商户唯一标识）
+	ConnectSys               string `json:"connectSys" form:"connectSys"`                                                                                    // 转接系统（字符串，可选，如“OPENCHANNEL”）
+	SubInst                  string `json:"subInst" form:"subInst"`                                                                                          // 商户所属分支机构代码（字符串，可选）
+	YxlmAmount               int64  `json:"yxlmAmount" form:"yxlmAmount"`                                                                                    // 联盟优惠金额（数字型，单位：分，可选，仅享联盟优惠订单返回）
+	RefundExtOrderId         string `json:"refundExtOrderId" form:"refundExtOrderId"`                                                                        // 退货外部订单号（字符串，可选）
+	GoodsTradeNo             string `json:"goodsTradeNo" form:"goodsTradeNo"`                                                                                // 商品交易单号（字符串，可选）
+	ExtOrderId               string `json:"extOrderId" form:"extOrderId"`                                                                                    // 外部订单号（字符串，可选，商户外部系统订单号）
+	SecureStatus             string `json:"secureStatus" form:"secureStatus" validate:"omitempty,oneof=UNCOMPLETED PARTLY_COMPLETED ALL_COMPLETED CANCELED"` // 担保交易状态（字符串，可选，取值见文档2.4）
+	CompleteAmount           int64  `json:"completeAmount" form:"completeAmount"`                                                                            // 担保完成金额（数字型，单位：分，可选）
+	RefundOrderId            string `json:"refundOrderId" form:"refundOrderId"`                                                                              // 退货订单号（字符串，可选，需符合商户订单号生成规范）
+}
+
+// ParsePayTime 解析PayTime为time.Time类型
+func (req *WxAppPayNotifyReq) ParsePayTime() (time.Time, error) {
+	return time.Parse("2006-01-02 15:04:05", req.PayTime)
+}
+
+// ParseSettleDate 解析SettleDate为time.Time类型
+func (req *WxAppPayNotifyReq) ParseSettleDate() (time.Time, error) {
+	return time.Parse("2006-01-02", req.SettleDate)
 }
 
 // QrPayReq 二维码支付请求参数
