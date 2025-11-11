@@ -252,6 +252,8 @@ type WxAppPayResp struct {
 	Mid            string `json:"mid"`     //商户ID
 	MiniPayRequest struct {
 		Package   string `json:"package"`
+		Miniuser  string `json:"miniuser"`  //小程序用户标识
+		Minipath  string `json:"minipath"`  //小程序路径
 		AppId     string `json:"appId"`     //微信APPID
 		Sign      string `json:"sign"`      //签名
 		PartnerId string `json:"partnerId"` //商户号

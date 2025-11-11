@@ -2,9 +2,10 @@ package chinaums
 
 import (
 	"fmt"
-	"github.com/levigross/grequests"
 	"strings"
 	"time"
+
+	"github.com/levigross/grequests"
 )
 
 type wxAppPay struct{}
@@ -31,9 +32,6 @@ func (w *wxAppPay) Pay(req *WxAppPayReq) (*WxAppPayResp, error) {
 	}
 	if req.Tid == "" {
 		req.Tid = config.TerminalIdCB
-	}
-	if req.SubOpenId == "" {
-		return nil, fmt.Errorf("wechat openid is empty")
 	}
 	if req.SubAppId == "" {
 		return nil, fmt.Errorf("wechat appid is empty")
