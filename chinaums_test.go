@@ -211,3 +211,23 @@ func TestBumTransfer(t *testing.T) {
 		t.Log(ToJSONPretty(resp))
 	}
 }
+
+func TestGenerateChkFile(t *testing.T) {
+	Client.Bum.PrivateKeyFile = "D:\\Work\\go\\src\\github.com\\maczh\\chinaums\\key\\rsa_private_dev.pfx"
+	Client.Bum.PrivateKeyPwd = "123456"
+	err := GenerateChkFile("D:\\Work\\go\\src\\github.com\\maczh\\chinaums\\README.md", "D:\\Work\\go\\src\\github.com\\maczh\\chinaums\\key\\rsa_private_dev.pfx", "123456", "D:\\Work\\go\\src\\github.com\\maczh\\chinaums\\README.md.chk")
+	if err != nil {
+		t.Errorf("生成chk文件错误: %s", err.Error())
+		return
+	}
+	t.Log("生成chk文件成功")
+}
+
+func TestLoadPublicKey(t *testing.T) {
+	_, err := loadPublicKey("D:\\Work\\go\\src\\github.com\\maczh\\chinaums\\key\\rsa_public_dev.cer")
+	if err != nil {
+		t.Errorf("加载公钥错误: %s", err.Error())
+		return
+	}
+	t.Log("加载公钥成功")
+}

@@ -5,15 +5,18 @@ import (
 	"crypto/md5"
 	"crypto/rand"
 	"crypto/rsa"
+	"crypto/sha256"
 	"crypto/x509"
 	"encoding/hex"
 	"encoding/pem"
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"os"
 	"time"
 
 	"github.com/levigross/grequests"
+	"golang.org/x/crypto/pkcs12"
 )
 
 type businessUnifyMulti struct {
@@ -245,7 +248,8 @@ func GenerateChkFile(filePath, privateKeyPath, privateKeyPassword, chkFilePath s
 	// 2. 计算文件MD5哈希值（字节数组）
 	md5Hash := md5.Sum(fileContent)
 	md5Bytes := md5Hash[:] // MD5结果为16字节数组
-
+	fmt.Printf("原文件MD5: %x", md5Bytes)
+	hashed := sha256.Sum256(md5Bytes)
 	// 3. 加载私钥
 	privateKey, err := loadPrivateKey(privateKeyPath, privateKeyPassword)
 	if err != nil {
@@ -257,7 +261,7 @@ func GenerateChkFile(filePath, privateKeyPath, privateKeyPassword, chkFilePath s
 		rand.Reader,
 		privateKey,
 		crypto.SHA256, // 文档要求SHA256withRSA算法
-		md5Bytes,
+		hashed[:],
 	)
 	if err != nil {
 		return fmt.Errorf("签名失败: %v", err)
@@ -276,43 +280,51 @@ func GenerateChkFile(filePath, privateKeyPath, privateKeyPassword, chkFilePath s
 
 // 加载带密码的RSA私钥（PEM格式）
 func loadPrivateKey(keyPath, password string) (*rsa.PrivateKey, error) {
-	keyData, err := ioutil.ReadFile(keyPath)
+	pfxData, err := os.ReadFile(keyPath)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("read private key file error: %w", err)
 	}
 
-	// 解码PEM块
-	block, _ := pem.Decode(keyData)
-	if block == nil {
-		return nil, errors.New("私钥PEM格式错误")
-	}
-
-	// 若私钥加密，使用密码解密
-	var keyBytes []byte
-	if x509.IsEncryptedPEMBlock(block) {
-		keyBytes, err = x509.DecryptPEMBlock(block, []byte(password))
+	// 首先尝试直接解析
+	privateKey, _, err := pkcs12.Decode(pfxData, password)
+	var priKey *rsa.PrivateKey
+	if err != nil {
+		// 如果直接解析失败，尝试解析所有证书
+		blocks, err := pkcs12.ToPEM(pfxData, password)
 		if err != nil {
-			return nil, fmt.Errorf("私钥解密失败: %v", err)
+			return nil, fmt.Errorf("decode PKCS12 file error: %w", err)
+		}
+
+		// 查找私钥
+		for _, block := range blocks {
+			if block.Type == "PRIVATE KEY" || block.Type == "RSA PRIVATE KEY" {
+				privateKey, err = x509.ParsePKCS1PrivateKey(block.Bytes)
+				if err == nil {
+					priKey = privateKey.(*rsa.PrivateKey)
+					break
+				}
+				// 尝试 PKCS8 格式
+				pk, err := x509.ParsePKCS8PrivateKey(block.Bytes)
+				if err == nil {
+					var ok bool
+					priKey, ok = pk.(*rsa.PrivateKey)
+					if ok {
+						break
+					}
+				}
+			}
+		}
+		if priKey == nil {
+			return nil, fmt.Errorf("no valid RSA private key found in PKCS12 file")
 		}
 	} else {
-		keyBytes = block.Bytes
-	}
-
-	// 解析PKCS#1格式私钥
-	privateKey, err := x509.ParsePKCS1PrivateKey(keyBytes)
-	if err != nil {
-		// 尝试解析PKCS#8格式
-		pkcs8Key, err := x509.ParsePKCS8PrivateKey(keyBytes)
-		if err != nil {
-			return nil, fmt.Errorf("解析私钥失败: %v", err)
-		}
-		privateKey, ok := pkcs8Key.(*rsa.PrivateKey)
+		var ok bool
+		priKey, ok = privateKey.(*rsa.PrivateKey)
 		if !ok {
-			return nil, errors.New("私钥非RSA类型")
+			return nil, errors.New("not rsa private key")
 		}
-		return privateKey, nil
 	}
-	return privateKey, nil
+	return priKey, nil
 }
 
 // VerifyRetChkFile 验证回盘文件的.chk签名
@@ -364,26 +376,60 @@ func VerifyRetChkFile(retFilePath, chkFilePath, publicKeyPath string) (bool, err
 	return true, nil
 }
 
-// 加载RSA公钥（PEM格式）
+// 加载RSA公钥（CER格式）
 func loadPublicKey(keyPath string) (*rsa.PublicKey, error) {
 	keyData, err := ioutil.ReadFile(keyPath)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to read public key file: %v", err)
 	}
 
+	// 首先尝试直接解析为 DER 格式的证书
+	cert, err := x509.ParseCertificate(keyData)
+	if err == nil {
+		// 成功解析为 DER 格式证书
+		if rsaPubKey, ok := cert.PublicKey.(*rsa.PublicKey); ok {
+			return rsaPubKey, nil
+		}
+		return nil, errors.New("certificate does not contain RSA public key")
+	}
+
+	// 如果 DER 解析失败，尝试 PEM 解码
 	block, _ := pem.Decode(keyData)
 	if block == nil {
-		return nil, errors.New("公钥PEM格式错误")
+		return nil, errors.New("not a valid PEM format and not a valid DER certificate")
 	}
 
-	pubKey, err := x509.ParsePKIXPublicKey(block.Bytes)
-	if err != nil {
-		return nil, err
-	}
+	// 处理 PEM 格式
+	switch block.Type {
+	case "CERTIFICATE":
+		// PEM 格式的证书
+		cert, err := x509.ParseCertificate(block.Bytes)
+		if err != nil {
+			return nil, fmt.Errorf("failed to parse certificate: %v", err)
+		}
+		rsaPubKey, ok := cert.PublicKey.(*rsa.PublicKey)
+		if !ok {
+			return nil, errors.New("certificate does not contain RSA public key")
+		}
+		return rsaPubKey, nil
 
-	rsaPubKey, ok := pubKey.(*rsa.PublicKey)
-	if !ok {
-		return nil, errors.New("公钥非RSA类型")
+	case "PUBLIC KEY":
+		// PKIX 格式的公钥
+		pubKey, err := x509.ParsePKIXPublicKey(block.Bytes)
+		if err != nil {
+			return nil, fmt.Errorf("failed to parse PKIX public key: %v", err)
+		}
+		rsaPubKey, ok := pubKey.(*rsa.PublicKey)
+		if !ok {
+			return nil, errors.New("public key is not of type RSA")
+		}
+		return rsaPubKey, nil
+
+	case "RSA PUBLIC KEY":
+		// PKCS1 格式的公钥
+		return x509.ParsePKCS1PublicKey(block.Bytes)
+
+	default:
+		return nil, fmt.Errorf("unsupported PEM block type: %s", block.Type)
 	}
-	return rsaPubKey, nil
 }
