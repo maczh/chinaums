@@ -829,16 +829,18 @@ type BumQueryMerchantResp struct {
 
 // BumBatchFileRecord 异步核销订单批量文件明细行结构体（对应5.1.2批量文件格式表格）
 type BumBatchFileRecord struct {
-	ID          uint   `gorm:"primaryKey;autoIncrement" json:"id"`                                // 自增主键
-	CmdId       string `gorm:"column:cmd_id;type:varchar(60);not null" json:"cmdId"`              // 指令ID，M(必须出现且不为空)，长度1-60，集团内唯一
-	SrcMerNo    string `gorm:"column:src_mer_no;type:varchar(14);not null" json:"srcMerNo"`       // 充值核销源企业用户号，M(必须出现且不为空)，定长14位（格式100010000******）
-	MerOrderNo  string `gorm:"column:mer_order_no;type:varchar(60);not null" json:"merOrderNo"`   // 商户订单号，M(必须出现且不为空)，长度1-60，核销唯一键
-	VerifyAmt   string `gorm:"column:verify_amt;type:varchar(16);not null" json:"verifyAmt"`      // 核销金额，M(必须出现且不为空)，长度16位（单位分，字符类型）
-	TargetMerNo string `gorm:"column:target_mer_no;type:varchar(14);not null" json:"targetMerNo"` // 充值核销目标企业用户号，M(必须出现且不为空)，定长14位（格式100010000******）
-	Reserve1    string `gorm:"column:reserve1;varchar(255);null" json:"reserve1"`                 // 保留域1，M(必须出现且不为空)，商户侧用户号（唯一标识充值用户或预付资金交易用户ID）
-	Reserve2    string `gorm:"column:reserve2;varchar(64)" json:"reserve2"`                       // 保留域2，C(特定环境下必须出现且不为空)
-	Reserve3    string `gorm:"column:reserve3;varchar(64)" json:"reserve3"`                       // 保留域3，C(特定环境下必须出现且不为空)
-	Reserve4    string `gorm:"column:reserve4;varchar(64)" json:"reserve4"`                       // 保留域4，C(特定环境下必须出现且不为空)
+	ID            uint   `gorm:"primaryKey;autoIncrement" json:"id"`                                // 自增主键
+	CmdId         string `gorm:"column:cmd_id;type:varchar(60);not null" json:"cmdId"`              // 指令ID，M(必须出现且不为空)，长度1-60，集团内唯一
+	SrcMerNo      string `gorm:"column:src_mer_no;type:varchar(14);not null" json:"srcMerNo"`       // 充值核销源企业用户号，M(必须出现且不为空)，定长14位（格式100010000******）
+	MerOrderNo    string `gorm:"column:mer_order_no;type:varchar(60);not null" json:"merOrderNo"`   // 商户订单号，M(必须出现且不为空)，长度1-60，核销唯一键
+	VerifyAmt     string `gorm:"column:verify_amt;type:varchar(16);not null" json:"verifyAmt"`      // 核销金额，M(必须出现且不为空)，长度16位（单位分，字符类型）
+	TargetMerNo   string `gorm:"column:target_mer_no;type:varchar(14);not null" json:"targetMerNo"` // 充值核销目标企业用户号，M(必须出现且不为空)，定长14位（格式100010000******）
+	Reserve1      string `gorm:"column:reserve1;varchar(255);null" json:"reserve1"`                 // 保留域1，M(必须出现且不为空)，商户侧用户号（唯一标识充值用户或预付资金交易用户ID）
+	Reserve2      string `gorm:"column:reserve2;varchar(64)" json:"reserve2"`                       // 保留域2，C(特定环境下必须出现且不为空)
+	Reserve3      string `gorm:"column:reserve3;varchar(64)" json:"reserve3"`                       // 保留域3，C(特定环境下必须出现且不为空)
+	Reserve4      string `gorm:"column:reserve4;varchar(64)" json:"reserve4"`                       // 保留域4，C(特定环境下必须出现且不为空)
+	Verified      int    `gorm:"column:verified;type:tinyint;default:0" json:"verified"`            // 是否已核销，0-未核销，1-已核销，2-核销中,3-核销失败,4-已生成核销订单
+	VerifyOrderNo string `gorm:"column:verify_order_no;type:varchar(60)" json:"verifyOrderNo"`      // 核销订单号，核销平台生成的核销订单号
 }
 
 // 表名映射（如需持久化到数据库）
