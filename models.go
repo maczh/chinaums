@@ -865,3 +865,18 @@ type BumBatchFileRespRecord struct {
 func (BumBatchFileRespRecord) TableName() string {
 	return "bum_batch_file_resp_record" // 可根据实际需求修改表名
 }
+
+type BumBatchTransferFileRecord struct {
+	ID                uint   `gorm:"primaryKey;autoIncrement" json:"id"`                                        // 自增主键
+	CmdId             string `gorm:"column:cmd_id;type:varchar(30);not null" json:"cmdId"`                      // 指令ID，M(必须出现且不为空)，长度1-60，集团内唯一
+	TargetMerNo       string `gorm:"column:target_mer_no;type:varchar(14);not null" json:"targetMerNo"`         // 充值核销目标企业用户号，M(必须出现且不为空)，定长14位（格式100010000******）
+	Amount            int64  `gorm:"column:amount;type:bigint;not null" json:"amount"`                          // 金额，M(必须出现且不为空)，单位分，数值类型
+	Remark            string `gorm:"column:remark;type:varchar(64);null" json:"remark"`                         // 备注，最长30字符，只允许使用数字、字母、汉字、空格以及“-”。长度判断方式：对附言获取byte数组，编码UTF-8，转Base64
+	TransferredAmount int64  `gorm:"column:transferred_amount;type:tinyint;default:0" json:"transferredAmount"` // 划付成功金额，单位为分
+	Status            int    `gorm:"column:status;type:tinyint;default:0" json:"status"`                        // 是否已核销，0-未提交，1-成功，2-部分成功,3-处理中,4-失败
+	FailReason        string `gorm:"column:fail_reason;type:varchar(240);null" json:"failReason"`               // 失败原因
+}
+
+func (BumBatchTransferFileRecord) TableName() string {
+	return "bum_batch_transfer_file_record" // 可根据实际需求修改表名
+}
